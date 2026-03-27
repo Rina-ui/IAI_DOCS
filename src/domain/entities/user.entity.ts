@@ -19,6 +19,18 @@ export class User {
   }
 }
 
+export class Admin extends User {
+  constructor(
+    id: string,
+    email: string,
+    passwordHash: string,
+    firstName: string,
+    lastName: string,
+  ) {
+    super(id, email, passwordHash, firstName, lastName, UserRole.ADMIN);
+  }
+}
+
 export class Student extends User {
   constructor(
     id: string,
@@ -45,7 +57,7 @@ export class Teacher extends User {
     passwordHash: string,
     firstName: string,
     lastName: string,
-    public specialitu: string,
+    public speciality: string | undefined,
     public verified: boolean = false,
   ) {
     super(id, email, passwordHash, firstName, lastName, UserRole.TEACHER);
