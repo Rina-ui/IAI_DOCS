@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { RegisterUseCase } from '../application/auth/register.usecase';
 import { LoginUseCase } from '../application/auth/login.usecase';
 import { UserOrmEntity } from '../infrastructure/database/entities/user.orm-entity';
@@ -13,10 +14,14 @@ import { USER_REPOSITORY } from '../domain/repositories/user.repository';
 @Module({
   imports: [
     TypeOrmModule.forFeature([UserOrmEntity]),
-    PassportModule,
-    JwtModule.register({
-      secret: process.env.JWT_SECRET || 'fallback_secret',
-      signOptions: { expiresIn: '7d' },
+    PassportModule.register({ defaultStrategy: 'jwt' }),
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        secret: config.get<string>('JWT_SECRET'),
+        signOptions: { expiresIn: '7d' },
+      }),
     }),
   ],
   controllers: [AuthController],
@@ -26,6 +31,6 @@ import { USER_REPOSITORY } from '../domain/repositories/user.repository';
     JwtStrategy,
     { provide: USER_REPOSITORY, useClass: UserTypeOrmRepository },
   ],
-  exports: [JwtModule, PassportModule],
+  exports: [JwtModule, PassportModule, JwtStrategy],
 })
 export class AuthModule {}

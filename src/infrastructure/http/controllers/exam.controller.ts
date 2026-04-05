@@ -89,7 +89,7 @@ export class ExamController {
     });
   }
 
-  // Valider une épreuve (Teacher/Admin)
+  // Valider une épreuve
   @Patch(':id/validate')
   validate(@Param('id') id: string, @CurrentUser() user: any) {
     return this.validateExamUseCase.execute(id, user.id);
