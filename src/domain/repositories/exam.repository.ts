@@ -7,3 +7,5 @@ export interface IExamRepository {
   save(exam: Exam): Promise<Exam>;
   findPending(): Promise<Exam[]>;
 }
+
+export const EXAM_REPOSITORY = Symbol('IExamRepository');

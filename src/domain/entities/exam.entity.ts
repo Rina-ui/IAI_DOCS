@@ -26,7 +26,7 @@ export class Exam {
     this.status = ExamStatus.VALIDATED;
   }
 
-  isAvalaibleForTraining(): boolean {
+  isAvailableForTraining(): boolean {
     return this.status === ExamStatus.VALIDATED;
   }
 }
