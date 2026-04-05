@@ -4,7 +4,7 @@ export class Training {
     public studentId: string,
     public examId: string,
     public score: number = 0,
-    public startdeAt: Date = new Date(),
+    public startedAt: Date = new Date(),
     public submittedAt?: Date,
   ) {}
 
