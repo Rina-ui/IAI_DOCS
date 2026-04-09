@@ -23,7 +23,7 @@ export default function CourseCard({
         <Text className="text-xs text-secondary font-semibold mb-1">
           {category}
         </Text>
-        <Text className="text-sm font-bold text-on-surface">{title}</Text>
+        <Text className="text-lg font-bold text-on-surface">{title}</Text>
       </View>
     </Pressable>
   );

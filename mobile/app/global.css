@@ -5,7 +5,6 @@
 @import "nativewind/theme";
 
 @theme {
-  --font-sans: "PlusJakartaSans_400Regular";
 
   --color-primary: #1e3a8a;
   --color-secondary: #6d7698;

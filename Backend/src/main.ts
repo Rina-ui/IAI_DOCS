@@ -51,8 +51,9 @@ Toutes les routes protégées nécessitent un **Bearer Token JWT**.
     },
   });
 
-  await app.listen(process.env.PORT || 3000);
-  console.log(`Serveur: http://loca// garde le token entre les refreshslhost:${process.env.PORT || 3000}`);
-  console.log(`documentation: http://localhost:${process.env.PORT || 3000}/api/docs`);
+  await app.listen(process.env.PORT || 3000, '0.0.0.0');
+  console.log(`Serveur: http://localhost:${process.env.PORT || 3000}`);
+  console.log(`Documentation: http://localhost:${process.env.PORT || 3000}/api/docs`);
+  console.log(`Accès réseau: http://192.168.1.70:${process.env.PORT || 3000}`);
 }
 bootstrap();

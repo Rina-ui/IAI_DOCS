@@ -26,13 +26,13 @@ export default function SummaryCard({
       </View>
 
       <Text className="text-white text-2xl font-bold mb-2">{title}</Text>
-      <Text className="text-white/90 text-sm leading-5 mb-4">
+      <Text className="text-white/90 text-lg leading-5 mb-4">
         {description}
       </Text>
 
       <View className="flex-row items-center gap-1">
         <Ionicons name="trending-up" size={16} color="white" />
-        <Text className="text-white text-sm font-semibold">{productivity}</Text>
+        <Text className="text-white text-lg font-semibold">{productivity}</Text>
       </View>
     </View>
   );

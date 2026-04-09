@@ -40,7 +40,7 @@ export default function DocumentItem({
           color={colorMap[type]}
         />
       </View>
-      <View className="flex-1">
+      <View >
         <Text className="text-base font-semibold text-on-surface">{title}</Text>
         <Text className="text-xs text-secondary mt-1">{modifiedTime}</Text>
       </View>

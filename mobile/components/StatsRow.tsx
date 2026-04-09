@@ -14,7 +14,7 @@ function StatItem({ number, label, backgroundColor }: StatItemProps) {
   return (
     <View className={`flex-1 rounded-2xl p-4 ${backgroundColor}`}>
       <Text className="text-3xl font-bold text-white">{number}</Text>
-      <Text className="text-white text-sm mt-1">{label}</Text>
+      <Text className="text-white text-lg mt-1">{label}</Text>
     </View>
   );
 }
