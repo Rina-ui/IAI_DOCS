@@ -5,11 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cc79a29-cc52-4528-9ab2-16250d583bc7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/src/domain/entities/forum-reply.entity.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/domain/repositories/forum-reply.repository.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/forum-reply.orm-entity.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/repositories/forum-reply.typeorm-repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/application/admin/create-announcement.usecase.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/application/admin/create-teacher.usecase.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/domain/entities/announcement.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/domain/entities/subject.entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/domain/repositories/announcement.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/domain/repositories/subject.repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/announcement.orm-entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/subject.orm-entity.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/repositories/announcement.typeorm-repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/repositories/subject.typeorm-repository.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/seed/admin.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/seed/subjects.seed.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/admin.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/announcement.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/subject.controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/decorators/roles.decorator.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/guards/roles.guard.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/modules/admin.module.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/modules/subject.module.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/application/exam/upload-exam.usecase.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/application/exam/upload-exam.usecase.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/domain/entities/exam.entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/domain/entities/exam.entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/domain/repositories/exam.repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/domain/repositories/exam.repository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/exam.orm-entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/exam.orm-entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/user.orm-entity.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/entities/user.orm-entity.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/database/repositories/exam.typeorm-repository.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/database/repositories/exam.typeorm-repository.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/main.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +83,7 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Backend/src/domain/repositories" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Backend" />
     </key>
@@ -81,7 +106,9 @@
       <workItem from="1775395318131" duration="1888000" />
       <workItem from="1775409334186" duration="135000" />
       <workItem from="1775506113831" duration="643000" />
-      <workItem from="1775681907212" duration="309000" />
+      <workItem from="1775681907212" duration="911000" />
+      <workItem from="1775758577956" duration="8537000" />
+      <workItem from="1775767421946" duration="1002000" />
     </task>
     <servers />
   </component>
