@@ -1,93 +1,124 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import type { SubjectGroup } from "@/types";
 
+const TEMP_STATIC_SUBJECTS: SubjectGroup[] = [
+  {
+    subject: "Réseaux Informatiques",
+    count: 5,
+    exams: []
+  },
+  {
+    subject: "Génie Logiciel",
+    count: 4,
+    exams: []
+  },
+  {
+    subject: "Bases de Données",
+    count: 3,
+    exams: []
+  },
+  {
+    subject: "Développement Web",
+    count: 6,
+    exams: []
+  },
+  {
+    subject: "Programmation",
+    count: 5,
+    exams: []
+  },
+  {
+    subject: "Systèmes d'Exploitation",
+    count: 3,
+    exams: []
+  },
+  {
+    subject: "Sécurité Informatique",
+    count: 2,
+    exams: []
+  },
+  {
+    subject: "Intelligence Artificielle",
+    count: 2,
+    exams: []
+  },
+];
+
 interface SubjectListProps {
-  subjectGroups: SubjectGroup[];
-  getSubjectColor: (subject: string) => string;
-  getSubjectIcon: (subject: string) => keyof typeof Ionicons.glyphMap;
+  subjectGroups?: SubjectGroup[];
+  getSubjectIcon?: (subject: string) => keyof typeof Ionicons.glyphMap;
 }
 
 export function SubjectList({
   subjectGroups,
-  getSubjectColor,
   getSubjectIcon,
 }: SubjectListProps) {
   const router = useRouter();
 
-  if (subjectGroups.length === 0) return null;
+  // Fusionner les données du backend avec les données statiques temporaires
+  const mergedSubjects = React.useMemo(() => {
+    const backendMap = new Map(
+      subjectGroups?.map(group => [group.subject, group])
+    );
+
+    const backendSubjects = new Set(backendMap.keys());
+
+    const tempSubjects = TEMP_STATIC_SUBJECTS.filter(
+      temp => !backendSubjects.has(temp.subject)
+    );
+
+    return [...subjectGroups || [], ...tempSubjects];
+  }, [subjectGroups]);
+
+  if (mergedSubjects.length === 0) return null;
 
   return (
-    <View className="mt-6">
+    <View className="mt-3">
       {/* Header */}
       <View className="flex-row justify-between items-center mb-4 px-6">
         <View className="flex-row items-center">
-          <View className="w-1 h-6 bg-primary rounded-full mr-2" />
-          <Text className="text-on-surface font-bold text-xl">
-            Matières
-          </Text>
+          <Text className="text-on-surface font-bold text-xl">Matières</Text>
         </View>
-        
-        <TouchableOpacity 
-          onPress={() => router.push("/(main)/epreuves/epreuves")}
-          activeOpacity={0.7}
-          className="flex-row items-center"
-        >
-          <Text className="text-primary font-semibold text-sm mr-1">Tout voir</Text>
-          <Ionicons name="arrow-forward" size={14} color="#3B82F6" />
-        </TouchableOpacity>
       </View>
 
-      {/* Cards Container */}
-      <View className="px-6">
-        {subjectGroups.map((group, i) => (
-          <TouchableOpacity
-            key={group.subject}
-            className="bg-surface rounded-2xl mb-3"
-            onPress={() => router.push("/(main)/epreuves/epreuves")}
-            activeOpacity={0.7}
-          >
-            <View className="flex-row items-center justify-between px-4 py-4">
-              {/* Left Section - Icon & Info */}
-              <View className="flex-row items-center flex-1">
-                {/* Icon Container */}
-                <View
-                  className="w-12 h-12 rounded-xl items-center justify-center mr-4"
-                  style={{ backgroundColor: getSubjectColor(group.subject) + "15" }}
-                >
-                  <Ionicons
-                    name={getSubjectIcon(group.subject)}
-                    size={22}
-                    color={getSubjectColor(group.subject)}
-                  />
-                </View>
-                
-                {/* Subject Info */}
-                <View className="flex-1">
-                  <Text className="text-on-surface font-semibold text-base mb-0.5">
-                    {group.subject}
-                  </Text>
-                  <View className="flex-row items-center">
-                    <View className="w-1.5 h-1.5 rounded-full bg-primary opacity-60 mr-1" />
-                    <Text className="text-secondary text-xs">
-                      {group.count} épreuve{group.count > 1 ? "s" : ""}
-                    </Text>
-                  </View>
-                </View>
+      {/* Circles Row */}
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{ paddingHorizontal: 24, gap: 16 }}
+      >
+        {mergedSubjects.map((group, index) => {
+          return (
+            <TouchableOpacity
+              key={`${group.subject}-${index}`}
+              onPress={() => router.push("/(main)/epreuves/epreuves")}
+              activeOpacity={0.7}
+              className="items-center"
+            >
+              <View
+                className={`w-16 h-16 rounded-full overflow-hidden mb-2`}
+              >
+                <Image
+                  source={require("@/assets/images/mat.jpg")}
+                  className="w-full h-full"
+                  resizeMode="cover"
+                />
               </View>
 
-              {/* Right Section - Chevron */}
-              <Ionicons 
-                name="chevron-forward" 
-                size={18} 
-                color="#9CA3AF" 
-              />
-            </View>
-          </TouchableOpacity>
-        ))}
-      </View>
+              {/* Subject name */}
+              <Text
+                className="text-on-surface text-xs text-center font-medium"
+                numberOfLines={2}
+              >
+                {group.subject.substring(0, 12)}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 }

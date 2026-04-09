@@ -69,7 +69,7 @@ export default function RegisterScreen() {
         lastName: lastName.trim(),
         level,
       });
-      router.replace("/(main)/home/home");
+      router.replace("/(main)/(tabs)/home/home");
     } catch (error: any) {
       const message =
         error.response?.data?.message ||
@@ -100,15 +100,13 @@ export default function RegisterScreen() {
           <Text className="text-2xl font-bold text-on-surface text-center">
             Créer un compte
           </Text>
-          <Text className="text-base text-secondary text-center mt-1">
-            Rejoignez IAI Docs
-          </Text>
+          
         </View>
 
         {/* Form */}
         <View className="gap-4">
           {/* First Name & Last Name */}
-          <View className="flex-row gap-3">
+          <View className="flex-col gap-3">
             <View >
               <Text className="text-lg font-semibold text-on-surface mb-2">
                 Prénom
@@ -237,28 +235,33 @@ export default function RegisterScreen() {
             </TouchableOpacity>
 
             {showLevels && (
-              <View className="mt-2 bg-surface border border-neutral rounded-xl overflow-hidden">
-                {LEVELS.map((lvl) => (
-                  <TouchableOpacity
-                    key={lvl}
-                    className="px-4 py-3 border-b border-neutral"
-                    onPress={() => {
-                      setLevel(lvl);
-                      setShowLevels(false);
-                    }}
-                  >
-                    <Text
-                      className={`text-base ${level === lvl
-                        ? "text-primary font-semibold"
-                        : "text-on-surface"
-                        }`}
-                    >
-                      {lvl}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            )}
+  <View className="mt-2 bg-surface border border-neutral rounded-xl overflow-hidden max-h-48">
+    
+    <ScrollView nestedScrollEnabled showsVerticalScrollIndicator={false}>
+      {LEVELS.map((lvl) => (
+        <TouchableOpacity
+          key={lvl}
+          className="px-4 py-3 border-b border-neutral"
+          onPress={() => {
+            setLevel(lvl);
+            setShowLevels(false);
+          }}
+        >
+          <Text
+            className={`text-base ${
+              level === lvl
+                ? "text-primary font-semibold"
+                : "text-on-surface"
+            }`}
+          >
+            {lvl}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </ScrollView>
+
+  </View>
+)}
           </View>
 
           {/* Register Button */}
@@ -271,7 +274,7 @@ export default function RegisterScreen() {
             {loading ? (
               <ActivityIndicator color="white" />
             ) : (
-              <Text className="text-on-primary text-base font-semibold">
+              <Text className="text-white text-base font-semibold">
                 S'inscrire
               </Text>
             )}
@@ -280,11 +283,9 @@ export default function RegisterScreen() {
           {/* Login Link */}
           <View className="flex-row justify-center mt-6">
             <Text className="text-secondary">Déjà un compte ? </Text>
-            <Link href="/(auth)/login" asChild>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.replace("/(auth)/login")}>
                 <Text className="text-primary font-semibold">Se connecter</Text>
               </TouchableOpacity>
-            </Link>
           </View>
         </View>
       </ScrollView>

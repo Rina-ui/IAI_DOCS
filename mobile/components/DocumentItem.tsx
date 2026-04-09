@@ -16,9 +16,9 @@ const iconMap = {
 };
 
 const colorMap = {
-  pdf: "#1e3a8a",
-  docx: "#1e3a8a",
-  csv: "#1e3a8a",
+  pdf: "#F7D117",
+  docx: "#F7D117",
+  csv: "#F7D117",
   default: "#6d7698",
 };
 

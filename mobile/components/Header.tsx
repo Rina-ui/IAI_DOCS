@@ -21,7 +21,7 @@ export default function Header({
       </View>
       {showNotification && (
         <Pressable>
-          <Ionicons name="notifications-outline" size={24} color="#1e3a8a" />
+          <Ionicons name="notifications-outline" size={24} color="#F7D117" />
         </Pressable>
       )}
     </View>

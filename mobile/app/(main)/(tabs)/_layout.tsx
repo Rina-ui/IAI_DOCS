@@ -1,41 +1,102 @@
+import React from "react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Tabs } from "expo-router";
+import { View } from "react-native";
+import * as Haptics from "expo-haptics";
+
+const PRIMARY = "#EAB308";
+const INACTIVE = "#000";
 
 const tabs = [
-  { name: "home/home",         title: "Accueil",  icon: "home"          },
-  { name: "epreuves/epreuves", title: "Epreuves", icon: "document-text" },
-  { name: "forum/forum",       title: "Forum",    icon: "chatbubbles"   },
+  {
+    name: "home/home",
+    title: "Accueil",
+    icon: "home-outline" as const,
+    iconFocused: "home" as const,
+  },
+  {
+    name: "epreuves/epreuves",
+    title: "Épreuves",
+    icon: "document-text-outline" as const,
+    iconFocused: "document-text" as const,
+  },
+  {
+    name: "forum/forum",
+    title: "Forum",
+    icon: "chatbubbles-outline" as const,
+    iconFocused: "chatbubbles" as const,
+  },
 ] as const;
+
+function TabIcon({
+  focused,
+  icon,
+  iconFocused,
+}: {
+  focused: boolean;
+  icon: any;
+  iconFocused: any;
+  title: string;
+}) {
+  return (
+    <View
+      className=""
+    >
+      <Ionicons
+        name={focused ? iconFocused : icon}
+        size={20}
+        color={focused ? PRIMARY : INACTIVE}
+      />
+      
+    </View>
+  );
+}
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#1e3a8a",
-        tabBarInactiveTintColor: "#999999",
+
+        // ✅ FIX COULEUR LABEL
+        tabBarActiveTintColor: PRIMARY,
+        tabBarInactiveTintColor: INACTIVE,
+
         tabBarStyle: {
           position: "absolute",
-          bottom: Math.max(11, 16),
-          height: 80,
-          marginHorizontal: 16,
-          borderRadius: 70,
-          backgroundColor: "#fff",
+          bottom: 20,
+          marginHorizontal: 24,
+          height: 68,
+          borderRadius: 34,
+          backgroundColor: "#ffffff",
           borderTopWidth: 0,
-          elevation: 0,
+          elevation: 10,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.1,
+          shadowRadius: 12,
+          paddingBottom: 0,
         },
-        tabBarItemStyle: { paddingVertical: 10 },
-        tabBarIconStyle: { width: 24, height: 24, alignItems: "center" },
       }}
     >
       {tabs.map((tab) => (
         <Tabs.Screen
           key={tab.name}
           name={tab.name}
+          listeners={{
+            tabPress: () => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            },
+          }}
           options={{
             title: tab.title,
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name={tab.icon} color={color} size={size} />
+            tabBarIcon: ({ focused }) => (
+              <TabIcon
+                focused={focused}
+                icon={tab.icon}
+                iconFocused={tab.iconFocused}
+                title={tab.title}
+              />
             ),
           }}
         />

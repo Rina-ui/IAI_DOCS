@@ -39,7 +39,7 @@ export default function ForumPostDetail() {
     return new Date(d).toLocaleDateString("fr-FR");
   };
 
-  if (loading) return <View className="flex-1 bg-surface items-center justify-center"><ActivityIndicator size="large" color="#1e3a8a" /></View>;
+  if (loading) return <View className="flex-1 bg-surface items-center justify-center"><ActivityIndicator size="large" color="#F7D117" /></View>;
   if (!post) return <View className="flex-1 bg-surface items-center justify-center"><Text className="text-secondary">Post introuvable</Text></View>;
 
   return (
@@ -60,7 +60,7 @@ export default function ForumPostDetail() {
           <View className="bg-surface rounded-xl p-5 border border-neutral">
             <View className="flex-row items-center mb-3">
               <View className="w-10 h-10 bg-primary/10 rounded-full items-center justify-center mr-3">
-                <Ionicons name="person" size={18} color="#1e3a8a" />
+                <Ionicons name="person" size={18} color="#F7D117" />
               </View>
               <View >
                 <Text className="text-on-surface font-medium text-lg">Membre</Text>
@@ -73,7 +73,7 @@ export default function ForumPostDetail() {
 
             <View className="flex-row items-center justify-between mt-4 pt-4 border-t border-neutral">
               <TouchableOpacity className="flex-row items-center bg-primary/5 px-3 py-2 rounded-lg" onPress={handleUpvote}>
-                <Ionicons name="arrow-up" size={14} color="#1e3a8a" />
+                <Ionicons name="arrow-up" size={14} color="#F7D117" />
                 <Text className="text-primary text-lg font-semibold ml-1">{post.upvotes}</Text>
                 <Text className="text-secondary text-xs ml-2">upvotes</Text>
               </TouchableOpacity>

@@ -11,10 +11,10 @@ export function WelcomeEmptyState() {
       <View className="bg-surface rounded-xl p-5 mb-6">
         <View className="flex-row items-center mb-3">
           <View className="w-10 h-10 bg-primary/10 rounded-lg items-center justify-center mr-3">
-            <Ionicons name="rocket" size={20} color="#1e3a8a" />
+            <Ionicons name="rocket" size={20} color="#F7D117" />
           </View>
           <Text className="text-on-surface text-base font-bold">
-            Bienvenue sur IAI Docs
+            Bienvenue sur IAI DOCS
           </Text>
         </View>
         <Text className="text-secondary text-lg leading-relaxed mb-4">
@@ -38,7 +38,7 @@ export function WelcomeEmptyState() {
         <TipCard
           icon="school"
           title="Révisez régulièrement"
-          color="#1e3a8a"
+          color="#F7D117"
         />
         <TipCard
           icon="bulb"

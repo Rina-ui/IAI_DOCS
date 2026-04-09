@@ -8,23 +8,13 @@ import type {
 
 export const authService = {
   async login(data: LoginRequest): Promise<AuthResponse> {
-    try {
-      const response = await api.post<AuthResponse>("/auth/login", data);
-      return response.data;
-    } catch (error) {
-      console.error("[AuthService] Login error:", error);
-      return { token: "", user: {} as AuthResponse["user"] };
-    }
+    const response = await api.post<AuthResponse>("/auth/login", data);
+    return response.data;
   },
 
   async register(data: RegisterRequest): Promise<AuthResponse> {
-    try {
-      const response = await api.post<AuthResponse>("/auth/register", data);
-      return response.data;
-    } catch (error) {
-      console.error("[AuthService] Register error:", error);
-      return { token: "", user: {} as AuthResponse["user"] };
-    }
+    const response = await api.post<AuthResponse>("/auth/register", data);
+    return response.data;
   },
 
   async logout(): Promise<void> {

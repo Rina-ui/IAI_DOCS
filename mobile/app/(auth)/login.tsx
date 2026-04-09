@@ -32,7 +32,7 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await login({ email: email.trim(), password });
-      router.replace("/(main)/home/home");
+      router.replace("/(main)/(tabs)/home/home");
     } catch (error: any) {
       const message =
         error.response?.data?.message ||
@@ -63,7 +63,7 @@ export default function LoginScreen() {
               resizeMode="contain"
             />
             <Text className="text-3xl font-bold text-on-surface text-center">
-              IAI Docs
+              IAI DOCS
             </Text>
             <Text className="text-base text-secondary text-center mt-2">
               Connectez-vous pour continuer
@@ -142,7 +142,7 @@ export default function LoginScreen() {
               {loading ? (
                 <ActivityIndicator color="white" />
               ) : (
-                <Text className="text-on-primary text-base font-semibold">
+                <Text className="text-white text-base font-semibold">
                   Se connecter
                 </Text>
               )}
@@ -151,13 +151,11 @@ export default function LoginScreen() {
             {/* Register Link */}
             <View className="flex-row justify-center mt-6">
               <Text className="text-secondary">Pas encore de compte ? </Text>
-              <Link href="/" asChild>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => router.replace("/(auth)/register")}>
                   <Text className="text-primary font-semibold">
                     S'inscrire
                   </Text>
                 </TouchableOpacity>
-              </Link>
             </View>
           </View>
         </View>

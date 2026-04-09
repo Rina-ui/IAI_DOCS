@@ -7,7 +7,7 @@ import type { Exam } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
 
 const SUBJECT_COLORS: Record<string, string> = {
-  Mathematiques: "#1e3a8a", Physique: "#7c3aed", Chimie: "#059669", Francais: "#dc2626",
+  Mathematiques: "#F7D117", Physique: "#7c3aed", Chimie: "#059669", Francais: "#dc2626",
   Histoire: "#d97706", Philosophie: "#4f46e5", Anglais: "#0891b2", SVT: "#16a34a", Informatique: "#2563eb",
 };
 
@@ -27,7 +27,7 @@ export default function ExamDetail() {
     examService.getById(id).then((data) => { setExam(data); setLoading(false); }).catch(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <View className="flex-1 bg-surface items-center justify-center"><ActivityIndicator size="large" color="#1e3a8a" /></View>;
+  if (loading) return <View className="flex-1 bg-surface items-center justify-center"><ActivityIndicator size="large" color="#F7D117" /></View>;
   if (!exam) return <View className="flex-1 bg-surface items-center justify-center"><Text className="text-secondary">Épreuve introuvable</Text></View>;
 
   const color = SUBJECT_COLORS[exam.subject] || "#6d7698";

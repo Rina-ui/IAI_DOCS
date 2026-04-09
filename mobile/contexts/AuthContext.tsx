@@ -47,6 +47,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = async (data: LoginRequest) => {
     console.log("[Auth] Logging in...");
     const response = await authService.login(data);
+    
+    if (!response || !response.token) {
+      throw new Error("Identifiants invalides ou erreur serveur");
+    }
+
     console.log("[Auth] Login successful, token:", response.token ? "YES" : "NO");
     await SecureStore.setItemAsync("auth_token", response.token);
     await SecureStore.setItemAsync("user_data", JSON.stringify(response.user));
@@ -57,6 +62,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = async (data: RegisterRequest) => {
     console.log("[Auth] Registering...");
     const response = await authService.register(data);
+
+    if (!response || !response.token) {
+      throw new Error("Erreur lors de l'inscription");
+    }
+
     console.log("[Auth] Register successful");
     await SecureStore.setItemAsync("auth_token", response.token);
     await SecureStore.setItemAsync("user_data", JSON.stringify(response.user));

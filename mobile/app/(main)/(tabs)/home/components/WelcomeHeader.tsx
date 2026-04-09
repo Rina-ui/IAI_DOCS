@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
@@ -35,7 +35,7 @@ export function WelcomeHeader({
           className="w-12 h-12 bg-primary p-2 rounded-full justify-center items-center"
           onPress={() => router.push("/(main)/profile/profile")}
         >
-          <Ionicons name="person" size={20} className="text-white" />
+          <Image source={require("../../../../../assets/images/avatar.jpg")} className="w-12 h-12 rounded-full" />
         </TouchableOpacity>
       </View>
 
