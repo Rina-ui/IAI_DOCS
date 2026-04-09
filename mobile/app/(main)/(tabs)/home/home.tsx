@@ -6,6 +6,10 @@ import { useRouter } from "expo-router";
 import { examService, forumService } from "@/services/dataService";
 import type { Exam, ForumPost, SubjectGroup } from "@/types";
 import { Ionicons } from "@expo/vector-icons";
+import { Animated, Easing } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
+
+
 
 import { WelcomeHeader } from "./components/WelcomeHeader";
 import { SubjectList } from "./components/SubjectList";
@@ -28,6 +32,67 @@ export const SUBJECT_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
 export default function Home() {
   const { user } = useAuth();
   const router = useRouter();
+
+
+  // Animation for AI Button using standard Animated API
+  const pulseAnim = React.useRef(new Animated.Value(1)).current;
+  const shimmerAnim = React.useRef(new Animated.Value(-1)).current;
+
+  useEffect(() => {
+    // Pulse animation
+    const pulseSequence = Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.1,
+          duration: 1000,
+          easing: Easing.bezier(0.4, 0, 0.6, 1),
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1000,
+          easing: Easing.bezier(0.4, 0, 0.6, 1),
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    // Shimmer animation
+    const shimmerLoop = Animated.loop(
+      Animated.timing(shimmerAnim, {
+        toValue: 1,
+        duration: 2500,
+        easing: Easing.linear,
+        useNativeDriver: true,
+      })
+    );
+
+    pulseSequence.start();
+    shimmerLoop.start();
+
+    return () => {
+      pulseSequence.stop();
+      shimmerLoop.stop();
+    };
+  }, []);
+
+  const animatedButtonStyle = {
+    transform: [{ scale: pulseAnim }],
+  };
+
+  const translateX = shimmerAnim.interpolate({
+    inputRange: [-1, 1],
+    outputRange: [-100, 100],
+  });
+
+  const animatedShimmerStyle = {
+    transform: [
+      { translateX },
+      { rotate: "30deg" }
+    ],
+  };
+
+
 
   const [exams, setExams] = useState<Exam[]>([]);
   const [forumPosts, setForumPosts] = useState<ForumPost[]>([]);
@@ -95,14 +160,51 @@ export default function Home() {
       </SafeAreaView>
 
       {/* Floating AI Button */}
-      <TouchableOpacity
-        onPress={() => router.push("/(main)/ai/ai")}
-        activeOpacity={0.8}
-        className="absolute bottom-28 right-6 w-14 h-14 bg-primary rounded-full items-center justify-center shadow-lg elevation-5"
-        style={{ zIndex: 50, shadowColor: "#0f172a", shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.2, shadowRadius: 6 }}
+      <Animated.View
+        style={[
+          {
+            zIndex: 50,
+            shadowColor: "#EAB308",
+            shadowOffset: { width: 0, height: 4 },
+            shadowOpacity: 0.4,
+            shadowRadius: 10,
+            position: "absolute",
+            bottom: 112, // match bottom-28 (28 * 4 = 112)
+            right: 24,   // match right-6 (6 * 4 = 24)
+          },
+          animatedButtonStyle,
+        ]}
       >
-        <Ionicons name="sparkles" size={28} className="text-white" />
-      </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => router.push("/(main)/ai/ai")}
+          activeOpacity={0.8}
+          className="w-14 h-14 bg-primary rounded-full items-center justify-center overflow-hidden elevation-8"
+        >
+          <Ionicons name="sparkles" size={28} color="white" />
+          
+          {/* Shimmer Effect */}
+          <Animated.View 
+            style={[
+              {
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                width: 40,
+                opacity: 0.3,
+              },
+              animatedShimmerStyle
+            ]}
+          >
+            <LinearGradient
+              colors={["transparent", "rgba(255, 255, 255, 0.8)", "transparent"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={{ flex: 1 }}
+            />
+          </Animated.View>
+        </TouchableOpacity>
+      </Animated.View>
+
     </View>
   );
 }
