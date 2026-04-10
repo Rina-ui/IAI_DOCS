@@ -2,47 +2,40 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DataSource } from 'typeorm';
+import { seedSubjects } from './infrastructure/database/seed/subjects.seed';
+import { seedAdmin } from './infrastructure/database/seed/admin.seed';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create(AppModule);
 
-  // Validation globale
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
-  app.enableCors();
+    app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
+    app.enableCors();
 
-  // Configuration Swagger
-  const config = new DocumentBuilder()
-      .setTitle('Plateforme Épreuves Intelligentes')
-      .setDescription(`
-## API de la plateforme d'épreuves intelligentes
+    // Seeds au démarrage
+    const dataSource = app.get(DataSource);
+    await seedSubjects(dataSource);
+    await seedAdmin(dataSource);
 
-### Fonctionnalités
-- Consultation des épreuves des années passées
-- Entraînement interactif avec correction IA
-- Forum de discussion
-- Gestion des utilisateurs (Student, Teacher, Admin)
+    // Swagger
+    const config = new DocumentBuilder()
+        .setTitle('Plateforme Épreuves IAI')
+        .setDescription('API de la plateforme d\'épreuves intelligentes — IAI')
+        .setVersion('1.0')
+        .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'JWT-auth')
+        .addTag('Auth', 'Inscription et connexion')
+        .addTag('Admin', 'Administration — teachers et annonces')
+        .addTag('Annonces', 'Annonces publiques')
+        .addTag('Subjects', 'Matières par filière')
+        .addTag('Exams', 'Gestion des épreuves')
+        .addTag('Trainings', 'Sessions d\'entraînement')
+        .addTag('Forum', 'Forum de discussion')
+        .build();
 
-### Authentification
-Toutes les routes protégées nécessitent un **Bearer Token JWT**.
-1. Créer un compte via \`POST /auth/register\`
-2. Se connecter via \`POST /auth/login\`
-3. Copier le token et cliquer sur **Authorize** 
-    `)
-      .setVersion('1.0')
-      .addBearerAuth(
-          {
-            type: 'http',
-            scheme: 'bearer',
-            bearerFormat: 'JWT',
-            description: 'Entrez votre token JWT',
-          },
-          'JWT-auth',
-      )
-      .addTag('Auth', 'Inscription et connexion')
-      .addTag('Exams', 'Gestion des épreuves')
-      .addTag('Trainings', 'Sessions d\'entraînement')
-      .addTag('Forum', 'Forum de discussion')
-      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api/docs', app, document, {
+        swaggerOptions: { persistAuthorization: true },
+    });
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document, {

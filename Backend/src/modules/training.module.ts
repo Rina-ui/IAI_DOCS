@@ -3,6 +3,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { StartTrainingUseCase } from '../application/training/start-training.usecase';
 import { SubmitTrainingUseCase } from '../application/training/submit-training.usecase';
 import { GetCorrectionUseCase } from '../application/training/get-correction.usecase';
+import { AnswerStepUseCase } from '../application/training/answer-step.usecase';
+import { LearningSummaryUseCase } from '../application/training/learning-summary.usecase';
 import { TrainingOrmEntity } from '../infrastructure/database/entities/training.orm-entity';
 import { CorrectionOrmEntity } from '../infrastructure/database/entities/correction.orm-entity';
 import { TrainingTypeOrmRepository } from '../infrastructure/database/repositories/training.typeorm-repository';
@@ -25,6 +27,8 @@ import { AuthModule } from './auth.module';
     StartTrainingUseCase,
     SubmitTrainingUseCase,
     GetCorrectionUseCase,
+    AnswerStepUseCase,
+    LearningSummaryUseCase,
     AiService,
     { provide: TRAINING_REPOSITORY, useClass: TrainingTypeOrmRepository },
     { provide: CORRECTION_REPOSITORY, useClass: CorrectionTypeOrmRepository },
