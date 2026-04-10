@@ -16,6 +16,7 @@ import { SubjectList } from "./components/SubjectList";
 import { RecentExamsList } from "./components/RecentExamsList";
 import { ForumActivityList } from "./components/ForumActivityList";
 import { Annoucement } from "./components/Annoucement";
+import { levelToFiliere } from "@/utils/levelToFiliere";
 
 export const SUBJECT_ICONS: Record<string, keyof typeof Ionicons.glyphMap> = {
   Mathematiques: "calculator",
@@ -131,6 +132,8 @@ export default function Home() {
     return acc;
   }, [] as SubjectGroup[]);
 
+  const userFiliere = levelToFiliere(user?.level);
+
   const topPosts = [...forumPosts].sort((a, b) => b.upvotes - a.upvotes).slice(0, 3);
   const recentExams = [...exams].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 4);
 
@@ -152,7 +155,7 @@ export default function Home() {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#EAB308" />}
         >
           <WelcomeHeader firstName={user?.firstName} examsCount={exams.length} level={user?.level} points={user?.points} />
-          <SubjectList  />
+          <SubjectList filiere={userFiliere} />
           <Annoucement />
           <RecentExamsList recentExams={recentExams} />
           <ForumActivityList topPosts={topPosts} />
@@ -181,9 +184,9 @@ export default function Home() {
           className="w-14 h-14 bg-primary rounded-full items-center justify-center overflow-hidden elevation-8"
         >
           <Ionicons name="sparkles" size={28} color="white" />
-          
+
           {/* Shimmer Effect */}
-          <Animated.View 
+          <Animated.View
             style={[
               {
                 position: "absolute",

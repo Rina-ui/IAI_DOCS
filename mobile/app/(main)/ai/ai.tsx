@@ -7,16 +7,12 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
   Animated,
-  Dimensions,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-
 
 interface Message {
   id: string;
@@ -30,13 +26,7 @@ export default function AIPage() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "1",
-      text: "Bonjour ! Je suis ton assistant IAI. Comment puis-je t'aider dans tes révisions aujourd'hui ? 🎓",
-      sender: "ai",
-      timestamp: new Date(),
-    },
-    {
-      id: "2",
-      text: "Tu peux me dire qu'elle epreuve tu souhaiterais resoudre",
+      text: "Bonjour ! Je suis ton assistant IAI. Comment puis-je t'aider dans tes révisions aujourd'hui ?",
       sender: "ai",
       timestamp: new Date(),
     },
@@ -54,7 +44,6 @@ export default function AIPage() {
     }).start();
   }, []);
 
-  // Scroll to bottom when messages change
   useEffect(() => {
     setTimeout(() => {
       flatListRef.current?.scrollToEnd({ animated: true });
@@ -75,65 +64,68 @@ export default function AIPage() {
     setInput("");
     setIsTyping(true);
 
-    // 🤖 FAKE RESPONSE
     setTimeout(() => {
       setIsTyping(false);
+
+      const userText = input.toLowerCase();
+      let aiResponse = "";
+
+      if (userText.includes("epreuv") || userText.includes("examen") || userText.includes("test")) {
+        aiResponse = "Pour beneficier de la correction IA, selectionnez une epreuve dans la section 'Epreuves', puis cliquez sur 'Passer l'examen'. L'IA corrigera automatiquement vos reponses !";
+      } else if (userText.includes("aider") || userText.includes("help") || userText.includes("comment")) {
+        aiResponse = "Voici comment utiliser IAI DOCS :\n\n1. Allez dans 'Epreuves' pour voir les examens disponibles\n2. Selectionnez une epreuve et cliquez sur 'Passer l'examen'\n3. Repondez aux questions\n4. Soumettez pour obtenir votre correction IA avec score et explications\n\nBonnes revisions !";
+      } else if (userText.includes("bonjour") || userText.includes("salut") || userText.includes("hello")) {
+        aiResponse = "Bonjour ! Pret a reviser ? Je vous recommande de choisir une epreuve dans la section 'Epreuves' et de la passer pour obtenir une correction IA detaillee. Bon courage !";
+      } else {
+        aiResponse = "Je suis l'assistant IAI DOC. Pour obtenir une correction IA, rendez-vous dans la section 'Epreuves', choisissez un examen et cliquez sur 'Passer l'examen'. L'IA analysera vos reponses et vous donnera un score detaille !";
+      }
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
-        text: "Désolé, l'IA est indisponible pour le moment. Nous travaillons à sa mise en ligne très prochainement ! 🛠️",
+        text: aiResponse,
         sender: "ai",
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
-    }, 2000);
-
+    }, 1500);
   };
 
-  const renderMessage = ({ item, index }: { item: Message; index: number }) => {
+  const renderMessage = ({ item }: { item: Message }) => {
     const isUser = item.sender === "user";
-    const isLast = index === messages.length - 1;
 
     return (
-      <View className={`mb-4 px-4 ${isUser ? "items-end" : "items-start"}`}>
-        <View className="flex-row items-end">
+      <View style={{ marginBottom: 16, paddingHorizontal: 16, alignItems: isUser ? "flex-end" : "flex-start" }}>
+        <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
           {!isUser && (
-            <View className="w-8 h-8 rounded-full bg-primary items-center justify-center mr-2 mb-1 shadow-sm">
+            <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#EAB308", alignItems: "center", justifyContent: "center", marginRight: 8, marginBottom: 4 }}>
               <Ionicons name="sparkles" size={16} color="white" />
             </View>
           )}
-          
+
           <View
             style={{
-              shadowColor: isUser ? "#EAB308" : "#000",
-              shadowOffset: { width: 0, height: 2 },
-              shadowOpacity: isUser ? 0.2 : 0.05,
-              shadowRadius: 4,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              borderRadius: 16,
+              borderBottomRightRadius: isUser ? 4 : 16,
+              borderBottomLeftRadius: isUser ? 16 : 4,
+              maxWidth: "85%",
+              backgroundColor: isUser ? "#EAB308" : "#FFFFFF",
+              borderColor: isUser ? "transparent" : "#E5E7EB",
+              borderWidth: 1,
             }}
-            className={`px-4 py-3 rounded-2xl max-w-[85%] ${
-              isUser
-                ? "bg-primary rounded-br-none"
-                : "bg-white border border-neutral/50 rounded-bl-none"
-            }`}
           >
-            <Text 
-              className={`text-[15px] leading-20 ${
-                isUser ? "text-white font-medium shadow-sm" : "text-slate-800"
-              }`}
-            >
+            <Text style={{ fontSize: 15, lineHeight: 22, color: isUser ? "#FFFFFF" : "#1F2937" }}>
               {item.text}
             </Text>
-            <Text 
-              className={`text-[10px] mt-1 self-end ${
-                isUser ? "text-white/80" : "text-slate-400"
-              }`}
-            >
-              {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            <Text style={{ fontSize: 10, marginTop: 4, alignSelf: "flex-end", color: isUser ? "rgba(255,255,255,0.7)" : "#9CA3AF" }}>
+              {item.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
             </Text>
           </View>
 
           {isUser && (
-            <View className="w-8 h-8 rounded-full bg-slate-200 items-center justify-center ml-2 mb-1">
-              <Ionicons name="person" size={16} color="#64748b" />
+            <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#E5E7EB", alignItems: "center", justifyContent: "center", marginLeft: 8, marginBottom: 4 }}>
+              <Ionicons name="person" size={16} color="#64748B" />
             </View>
           )}
         </View>
@@ -141,34 +133,44 @@ export default function AIPage() {
     );
   };
 
+  const TypingIndicator = () => (
+    <View style={{ flexDirection: "row", alignItems: "flex-start", paddingHorizontal: 16, marginBottom: 16 }}>
+      <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: "#EAB308", alignItems: "center", justifyContent: "center", marginRight: 8 }}>
+        <Ionicons name="sparkles" size={16} color="white" />
+      </View>
+      <View style={{ backgroundColor: "#FFFFFF", borderColor: "#E5E7EB", borderWidth: 1, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 16, borderBottomLeftRadius: 4, height: 40, justifyContent: "center" }}>
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: "#D1D5DB", marginRight: 4 }} />
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: "#D1D5DB", marginRight: 4 }} />
+          <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: "#D1D5DB" }} />
+        </View>
+      </View>
+    </View>
+  );
+
   return (
-    <SafeAreaView className="flex-1 bg-slate-50" edges={["top", "bottom"]}>
-      <Animated.View style={{ height:'100%', opacity: fadeAnim }}>
-
-
-        
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F8FAFC" }} edges={["top", "bottom"]}>
+      <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
         {/* HEADER */}
-        <View className="px-4 py-4 bg-white border-b border-slate-100 flex-row items-center justify-between shadow-sm z-10">
-          <TouchableOpacity 
+        <View style={{ paddingHorizontal: 16, paddingVertical: 16, backgroundColor: "#FFFFFF", borderBottomWidth: 1, borderBottomColor: "#F1F5F9", flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity
             onPress={() => router.back()}
-            className="w-10 h-10 items-center justify-center rounded-full bg-slate-50"
+            style={{ width: 40, height: 40, alignItems: "center", justifyContent: "center", borderRadius: 20, backgroundColor: "#F8FAFC" }}
           >
-            <Ionicons name="chevron-back" size={24} color="#0f172a" />
+            <Ionicons name="chevron-back" size={24} color="#0F172A" />
           </TouchableOpacity>
-          
-          <View className="items-center">
-            <View className="flex-row items-center">
-              <Text className="text-lg font-bold text-slate-900 mr-1">
+
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text style={{ fontSize: 18, fontWeight: "bold", color: "#0F172A", marginRight: 4 }}>
                 Assistant IAI
               </Text>
-              <View className="w-2 h-2 rounded-full bg-green-500" />
+              <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: "#22C55E" }} />
             </View>
-            <Text className="text-xs text-slate-500">En ligne</Text>
+            <Text style={{ fontSize: 12, color: "#64748B" }}>En ligne</Text>
           </View>
 
-          <TouchableOpacity className="w-10 h-10 items-center justify-center rounded-full bg-slate-50">
-            <Ionicons name="ellipsis-horizontal" size={20} color="#0f172a" />
-          </TouchableOpacity>
+          <View style={{ width: 40 }} />
         </View>
 
         <KeyboardAvoidingView
@@ -176,53 +178,27 @@ export default function AIPage() {
           style={{ flex: 1 }}
           keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
         >
-
-
           {/* CHAT AREA */}
           <FlatList
             ref={flatListRef}
             data={messages}
-            className="flex-1"
+            style={{ flex: 1 }}
             keyExtractor={(item) => item.id}
             renderItem={renderMessage}
-            contentContainerStyle={{
-              paddingTop: 20,
-              paddingBottom: 20,
-              flexGrow: 1,
-            }}
+            contentContainerStyle={{ paddingTop: 20, paddingBottom: 20 }}
             showsVerticalScrollIndicator={false}
-
-            ListFooterComponent={() => (
-              isTyping ? (
-                <View className="flex-row items-start px-4 mb-4">
-                  <View className="w-8 h-8 rounded-full bg-primary items-center justify-center mr-2 shadow-sm">
-                    <Ionicons name="sparkles" size={16} color="white" />
-                  </View>
-                  <View className="bg-white border border-neutral/50 px-4 py-3 rounded-2xl rounded-bl-none shadow-sm h-10 justify-center">
-                    <View className="flex-row space-x-1">
-                      <View className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" />
-                      <View className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" style={{ animationDelay: '0.2s' }} />
-                      <View className="w-1.5 h-1.5 rounded-full bg-slate-300 animate-pulse" style={{ animationDelay: '0.4s' }} />
-                    </View>
-                  </View>
-                </View>
-              ) : null
-            )}
+            ListFooterComponent={() => (isTyping ? <TypingIndicator /> : null)}
           />
 
           {/* INPUT AREA */}
-          <View className="px-4 py-3 bg-white border-t border-slate-100">
-            <View className="flex-row items-center bg-slate-50 rounded-2xl px-4 py-1 border border-slate-200">
-              <TouchableOpacity className="mr-2">
-                <Ionicons name="add-circle-outline" size={24} color="#64748b" />
-              </TouchableOpacity>
-              
+          <View style={{ paddingHorizontal: 16, paddingVertical: 12, backgroundColor: "#FFFFFF", borderTopWidth: 1, borderTopColor: "#F1F5F9" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", backgroundColor: "#F8FAFC", borderRadius: 16, paddingHorizontal: 16, paddingVertical: 4, borderWidth: 1, borderColor: "#E2E8F0" }}>
               <TextInput
                 value={input}
                 onChangeText={setInput}
                 placeholder="Posez votre question..."
-                className="flex-1 py-3 text-slate-800 text-[15px]"
-                placeholderTextColor="#94a3b8"
+                style={{ flex: 1, paddingVertical: 12, fontSize: 15, color: "#1F2937" }}
+                placeholderTextColor="#94A3B8"
               />
 
               <TouchableOpacity
@@ -232,14 +208,14 @@ export default function AIPage() {
               >
                 <LinearGradient
                   colors={["#EAB308", "#CA8A04"]}
-                  className="w-10 h-10 rounded-xl items-center justify-center shadow-sm"
+                  style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center" }}
                 >
                   <Ionicons name="arrow-up" size={22} color="white" />
                 </LinearGradient>
               </TouchableOpacity>
             </View>
-            <Text className="text-[10px] text-slate-400 text-center mt-2">
-              L'IA peut faire des erreurs. Vérifiez les informations importantes.
+            <Text style={{ fontSize: 10, color: "#94A3B8", textAlign: "center", marginTop: 8 }}>
+              L'IA peut faire des erreurs. Verifiez les informations importantes.
             </Text>
           </View>
         </KeyboardAvoidingView>

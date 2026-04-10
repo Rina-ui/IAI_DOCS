@@ -32,10 +32,7 @@ async function bootstrap() {
         .addTag('Forum', 'Forum de discussion')
         .build();
 
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api/docs', app, document, {
-        swaggerOptions: { persistAuthorization: true },
-    });
+    
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document, {
@@ -49,4 +46,4 @@ async function bootstrap() {
   console.log(`Documentation: http://localhost:${process.env.PORT || 3000}/api/docs`);
   console.log(`Accès réseau: http://192.168.1.70:${process.env.PORT || 3000}`);
 }
-bootstrap();
+bootstrap(); 

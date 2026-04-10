@@ -1,5 +1,5 @@
 import { api } from "../api";
-import type { ForumPost } from "./forum.types";
+import type { ForumPost, ForumReply } from "./forum.types";
 
 export const forumService = {
   async getAll(): Promise<ForumPost[]> {
@@ -11,6 +11,18 @@ export const forumService = {
     } catch (error) {
       console.error("[ForumService] Fetch forum posts error:", error);
       return [];
+    }
+  },
+
+  async getById(id: string): Promise<ForumPost> {
+    try {
+      console.log("[ForumService] Fetching post by id:", id);
+      const response = await api.get<ForumPost>(`/forum/${id}`);
+      console.log("[ForumService] Received post:", response.data.title);
+      return response.data;
+    } catch (error) {
+      console.error("[ForumService] Get post by id error:", error);
+      return {} as ForumPost;
     }
   },
 
@@ -31,6 +43,26 @@ export const forumService = {
     } catch (error) {
       console.error("[ForumService] Upvote post error:", error);
       return {} as ForumPost;
+    }
+  },
+
+  async reply(postId: string, content: string): Promise<ForumReply> {
+    try {
+      const response = await api.post<ForumReply>(`/forum/${postId}/replies`, { content });
+      return response.data;
+    } catch (error) {
+      console.error("[ForumService] Reply to post error:", error);
+      return {} as ForumReply;
+    }
+  },
+
+  async upvoteReply(id: string): Promise<ForumReply> {
+    try {
+      const response = await api.patch<ForumReply>(`/forum/replies/${id}/upvote`);
+      return response.data;
+    } catch (error) {
+      console.error("[ForumService] Upvote reply error:", error);
+      return {} as ForumReply;
     }
   },
 };

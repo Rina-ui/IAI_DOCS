@@ -8,9 +8,10 @@ import type { ForumPost } from "@/types";
 
 interface PostCardProps {
   post: ForumPost;
+  onPress?: () => void;
 }
 
-export function PostCard({ post }: PostCardProps) {
+export function PostCard({ post, onPress }: PostCardProps) {
   const viewRef = useRef(null);
   const [upvotes, setUpvotes] = useState(post.upvotes);
   const [isUpvoted, setIsUpvoted] = useState(false);
@@ -79,6 +80,7 @@ export function PostCard({ post }: PostCardProps) {
       <TouchableOpacity
         activeOpacity={0.7}
         className="bg-surface rounded-2xl p-4 mb-3 shadow-sm"
+        onPress={onPress}
       >
         {/* Header */}
         <View className="flex-row items-center mb-3">
@@ -120,9 +122,8 @@ export function PostCard({ post }: PostCardProps) {
                 color={isUpvoted ? "#EF4444" : "#9CA3AF"}
               />
               <Text
-                className={`ml-1 font-medium ${
-                  isUpvoted ? "text-primary" : "text-on-surface"
-                }`}
+                className={`ml-1 font-medium ${isUpvoted ? "text-primary" : "text-on-surface"
+                  }`}
               >
                 {upvotes}
               </Text>

@@ -15,3 +15,18 @@ export interface Correction {
   aiExplanation: string;
   generatedAt: string;
 }
+
+export interface AnswerStepResponse {
+  questionId: string;
+  isCorrect: boolean;
+  explanation: string;
+  tip: string;
+}
+
+export interface LearningSummary {
+  strengths: string[];
+  weaknesses: string[];
+  recommendations: string[];
+  motivationalMessage: string;
+  overallScore: number;
+}

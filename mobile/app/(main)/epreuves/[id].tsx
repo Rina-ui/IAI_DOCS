@@ -87,16 +87,22 @@ export default function ExamDetail() {
 
         {/* Actions */}
         <View className="px-6 mt-6 gap-3">
+          <TouchableOpacity className="bg-primary rounded-xl py-3 items-center" onPress={() => router.push({ pathname: "/(main)/epreuves/[id]/prendre", params: { id: exam.id } })}>
+            <View className="flex-row items-center">
+              <Ionicons name="create-outline" size={18} color="white" />
+              <Text className="text-white font-medium text-lg ml-2">Passer l'examen</Text>
+            </View>
+          </TouchableOpacity>
           {exam.fileUrl && (
-            <TouchableOpacity className="bg-primary rounded-xl py-3 items-center" onPress={() => Linking.openURL(exam.fileUrl)}>
+            <TouchableOpacity className="bg-surface border border-primary rounded-xl py-3 items-center" onPress={() => Linking.openURL(exam.fileUrl)}>
               <View className="flex-row items-center">
-                <Ionicons name="download-outline" size={18} color="white" />
-                <Text className="text-on-primary font-medium text-lg ml-2">Télécharger le PDF</Text>
+                <Ionicons name="download-outline" size={18} color="#F7D117" />
+                <Text className="text-primary font-medium text-lg ml-2">Télécharger le PDF</Text>
               </View>
             </TouchableOpacity>
           )}
-          <TouchableOpacity className="bg-surface border border-primary rounded-xl py-3 items-center" onPress={() => router.back()}>
-            <Text className="text-primary font-medium text-lg">Retour aux épreuves</Text>
+          <TouchableOpacity className="bg-surface border border-neutral rounded-xl py-3 items-center" onPress={() => router.back()}>
+            <Text className="text-on-surface font-medium text-lg">Retour aux épreuves</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

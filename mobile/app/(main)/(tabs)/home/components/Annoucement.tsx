@@ -6,47 +6,55 @@ import {
   Text,
   View,
   ViewToken,
+  ActivityIndicator,
 } from 'react-native'
+import { announcementService } from '@/services/dataService'
+import type { Announcement } from '@/services/announcement/announcementService'
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window')
 const ITEM_WIDTH = SCREEN_WIDTH - 32
 
-const SLIDES = [
+// Fallback slides if no announcements from API
+const FALLBACK_SLIDES = [
   {
-    id: '1',
-    uri: 'https://new.iai-togo.tg/img/IMG_4607.jpg',
-    title: 'Concours d’Entrée 2024-2025',
-    subtitle: 'Lancement officiel du concours national d’entrée à l’IAI-Togo. Déposez votre dossier dès maintenant.',
+    id: 'fallback-1',
+    title: 'Bienvenue sur IAI DOCS',
+    subtitle: 'Votre plateforme d\'entraînement aux examens avec correction IA',
+    image: require('@/assets/images/mat.jpg'),
   },
   {
-    id: '2',
-    uri: 'https://new.iai-togo.tg/img/IMG_9271111.jpg',
-    title: 'Nouveaux Laboratoires',
-    subtitle: 'Inauguration de nos salles multimédias équipées pour une formation pratique de haut niveau.',
-  },
-  {
-    id: '3',
-    uri: 'https://new.iai-togo.tg/img/IMG_4554.jpg',
-    title: 'Remise de Parchemins',
-    subtitle: 'Célébration du succès de nos étudiants. Félicitations aux nouveaux ingénieurs de travaux informatiques.',
-  },
-  {
-    id: '4',
-    uri: 'https://new.iai-togo.tg/img/IMG_4667.jpg', // Assuming logo for general info
-    title: 'Portail Gestion-Edu',
-    subtitle: 'Accédez à vos notes, emplois du temps et ressources pédagogiques via notre portail numérique.',
+    id: 'fallback-2',
+    title: 'Préparez vos examens',
+    subtitle: 'Accédez à des centaines d\'épreuves corrigées par l\'IA',
+    image: require('@/assets/images/mat.jpg'),
   },
 ]
 
-type Slide = (typeof SLIDES)[number]
+type Slide = {
+  id: string
+  title: string
+  subtitle: string
+  image?: { uri: string } | number
+  isImageUri?: boolean
+}
 
 const SlideItem = ({ item }: { item: Slide }) => (
   <View style={{ width: ITEM_WIDTH, borderRadius: 16, overflow: 'hidden' }}>
-    <Image
-      source={{ uri: item.uri }}
-      style={{ width: ITEM_WIDTH, height: 180 }}
-      resizeMode="cover"
-    />
+    {typeof item.image === 'number' ? (
+      <Image
+        source={item.image}
+        style={{ width: ITEM_WIDTH, height: 180 }}
+        resizeMode="cover"
+      />
+    ) : item.image ? (
+      <Image
+        source={item.image}
+        style={{ width: ITEM_WIDTH, height: 180 }}
+        resizeMode="cover"
+      />
+    ) : (
+      <View style={{ width: ITEM_WIDTH, height: 180, backgroundColor: '#1e293b' }} />
+    )}
     <View
       style={{
         position: 'absolute',
@@ -62,7 +70,7 @@ const SlideItem = ({ item }: { item: Slide }) => (
       <Text style={{ color: '#fff', fontWeight: '700', fontSize: 15 }}>
         {item.title}
       </Text>
-      <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, marginTop: 2 }}>
+      <Text style={{ color: 'rgba(255,255,255,0.8)', fontSize: 12, marginTop: 2 }} numberOfLines={2}>
         {item.subtitle}
       </Text>
     </View>
@@ -71,7 +79,31 @@ const SlideItem = ({ item }: { item: Slide }) => (
 
 export function Annoucement() {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [slides, setSlides] = useState<Slide[]>(FALLBACK_SLIDES)
+  const [loading, setLoading] = useState(true)
   const flatListRef = useRef<FlatList>(null)
+
+  useEffect(() => {
+    const fetchAnnouncements = async () => {
+      try {
+        const announcements = await announcementService.getAll()
+        if (announcements.length > 0) {
+          const apiSlides: Slide[] = announcements.map((a: Announcement) => ({
+            id: a.id,
+            title: a.title,
+            subtitle: a.content,
+          }))
+          setSlides(apiSlides)
+        }
+      } catch (error) {
+        console.error('[Announcement] Error fetching:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchAnnouncements()
+  }, [])
 
   const onViewableItemsChanged = useRef(
     ({ viewableItems }: { viewableItems: ViewToken[] }) => {
@@ -82,8 +114,9 @@ export function Annoucement() {
   ).current
 
   useEffect(() => {
+    if (slides.length <= 1) return
     const timer = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % SLIDES.length
+      const nextIndex = (activeIndex + 1) % slides.length
       flatListRef.current?.scrollToIndex({
         index: nextIndex,
         animated: true,
@@ -91,7 +124,7 @@ export function Annoucement() {
     }, 5000)
 
     return () => clearInterval(timer)
-  }, [activeIndex])
+  }, [activeIndex, slides.length])
 
   const getItemLayout = (_: any, index: number) => ({
     length: ITEM_WIDTH + 12,
@@ -99,17 +132,24 @@ export function Annoucement() {
     index,
   })
 
+  if (loading) {
+    return (
+      <View className="py-6 items-center">
+        <ActivityIndicator size="small" color="#EAB308" />
+      </View>
+    )
+  }
+
+  if (slides.length === 0) {
+    return null
+  }
+
   return (
     <View className="py-3">
-      {/* Header */}
-      {/* <View className="flex-row items-center justify-between px-4 mb-3">
-        <Text className="text- font-bold text-black">Annonces</Text>
-      </View> */}
-
       {/* Carousel */}
       <FlatList
         ref={flatListRef}
-        data={SLIDES}
+        data={slides}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <SlideItem item={item} />}
         horizontal
@@ -124,9 +164,9 @@ export function Annoucement() {
         getItemLayout={getItemLayout}
       />
 
-      {/* Dots — styles inline uniquement, pas de classes d'animation */}
+      {/* Dots */}
       <View className="flex-row justify-center items-center mt-3" style={{ gap: 6 }}>
-        {SLIDES.map((_, index) => (
+        {slides.map((_, index) => (
           <View
             key={index}
             style={{

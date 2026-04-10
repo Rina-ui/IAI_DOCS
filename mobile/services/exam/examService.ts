@@ -4,10 +4,12 @@ import type { Exam } from "./exam.types";
 export const examService = {
   async getAll(level?: string, subject?: string): Promise<Exam[]> {
     try {
-      console.log("[ExamService] Fetching exams, level:", level, "subject:", subject);
-      const response = await api.get<Exam[]>("/exams", {
-        params: { level, subject },
-      });
+      const params: Record<string, string> = {};
+      if (level) params.level = level;
+      if (subject) params.subject = subject;
+
+      console.log("[ExamService] Fetching exams", Object.keys(params).length ? `with params: ${JSON.stringify(params)}` : "(no filters)");
+      const response = await api.get<Exam[]>("/exams", { params });
       console.log("[ExamService] Received", response.data.length, "exams");
       return response.data;
     } catch (error) {
