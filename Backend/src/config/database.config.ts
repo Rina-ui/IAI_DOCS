@@ -1,9 +1,8 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
 export const databaseConfig = (): TypeOrmModuleOptions => {
-  const url = process.env.DATABASE_URL;
-
-  console.log('DATABASE_URL reçue:', url ? 'OUI' : 'NON — UNDEFINED');
+  const url = process.env.DB_URL || process.env.DATABASE_URL;
+  console.log('DB URL reçue:', url ? 'OUI' : 'NON');
 
   return {
     type: 'postgres',
