@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-tertiary-container: #004a31;
+  --color-primary-fixed-dim: #b6c4ff;
+  --color-outline-variant: #c5c5d3;
+  --color-surface-tint: #4059aa;
+  --color-on-background: #191c1e;
+  --color-tertiary: #059669;
+  --color-on-secondary-fixed-variant: #3d4565;
+  --color-surface: #FFFFFF;
+  --color-surface-container-high: #e7e8ea;
+  --color-primary: #EAB308;
+  --color-on-surface-variant: #444651;
+  --color-on-tertiary-container: #27c38a;
+  --color-surface-container-highest: #e1e2e4;
+  --color-on-primary: #000000;
+  --color-on-secondary-fixed: #111a37;
+  --color-on-error-container: #93000a;
+  --color-inverse-on-surface: #f0f1f3;
+  --color-surface-container: #edeef0;
+  --color-secondary-container: #d0d8ff;
+  --color-error: #ba1a1a;
+  --color-on-tertiary: #ffffff;
+  --color-on-tertiary-fixed: #002113;
+  --color-on-tertiary-fixed-variant: #005236;
+  --color-on-primary-container: #90a8ff;
+  --color-on-primary-fixed: #00164e;
+  --color-surface-container-lowest: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-surface-bright: #f8f9fb;
+  --color-inverse-surface: #2e3132;
+  --color-tertiary-fixed: #6ffbbe;
+  --color-tertiary-fixed-dim: #4edea3;
+  --color-primary-container: #1e3a8a;
+  --color-inverse-primary: #b6c4ff;
+  --color-on-secondary: #ffffff;
+  --color-on-secondary-container: #555e7f;
+  --color-outline: #757682;
+  --color-on-surface: #0F172A;
+  --color-primary-fixed: #dce1ff;
+  --color-surface-dim: #d9dadc;
+  --color-secondary-fixed-dim: #bdc5eb;
+  --color-surface-container-low: #f3f4f6;
+  --color-on-primary-fixed-variant: #264191;
+  --color-on-error: #ffffff;
+  --color-secondary: #475569;
+  --color-neutral: #F1F5F9;
+  --color-secondary-fixed: #dce1ff;
+  --color-surface-variant: #e1e2e4;
+  --font-sans: var(--font-inter);
+  --font-headline: var(--font-plus-jakarta-sans);
+  --font-body: var(--font-inter);
+  --font-label: var(--font-inter);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+}
