@@ -5,12 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cc79a29-cc52-4528-9ab2-16250d583bc7" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Backend/src/application/training/answer-step.usecase.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Backend/src/application/training/learning-summary.usecase.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/training.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/training.controller.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Backend/src/modules/training.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/modules/training.module.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,7 +80,8 @@
       <workItem from="1775506113831" duration="643000" />
       <workItem from="1775681907212" duration="911000" />
       <workItem from="1775758577956" duration="8537000" />
-      <workItem from="1775767421946" duration="2357000" />
+      <workItem from="1775767421946" duration="3051000" />
+      <workItem from="1775809899636" duration="1713000" />
     </task>
     <servers />
   </component>
