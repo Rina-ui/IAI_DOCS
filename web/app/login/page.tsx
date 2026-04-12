@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import tokenService from "@\/lib\/tokenService";
+import { redirectByRole } from "@\/lib\/roleRedirect";
 import { Building2, Eye, EyeOff, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,15 +24,23 @@ export default function LoginPage() {
     try {
       const response = await loginService(email, password);
 
-      // Store token and user data
-      console.log("Login successful, received response:", response);
-      tokenService.setToken(response.token);
+      // Debug: Log full response
+      console.log("✅ Login successful, received response:", response);
 
-      // Store user data in localStorage
+      // Store token and user data
+      tokenService.setToken(response.token);
       localStorage.setItem("user", JSON.stringify(response.user));
 
-      // Redirect to dashboard
-      window.location.href = "/dashboard";
+      // Debug: Log user role and redirect info
+      console.log("👤 User authenticated with role:", response.user.role);
+      console.log("📦 User data stored to localStorage:", {
+        id: response.user.id,
+        email: response.user.email,
+        role: response.user.role,
+      });
+
+      // Redirect based on role
+      redirectByRole(response.user.role);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Échec de la connexion";

@@ -292,9 +292,11 @@ export default function ForumPage() {
                 {/* Content Column */}
                 <div className="flex-grow flex flex-col justify-between min-w-0">
                   <div>
-                    <h2 className="font-headline text-lg lg:text-xl font-bold text-on-surface mb-2 leading-snug group-hover:text-primary transition-colors cursor-pointer">
-                      {q.title}
-                    </h2>
+                    <a href={`/student/forum/${q.id}`} className="block">
+                      <h2 className="font-headline text-lg lg:text-xl font-bold text-on-surface mb-2 leading-snug group-hover:text-primary transition-colors cursor-pointer">
+                        {q.title}
+                      </h2>
+                    </a>
                     <p className="text-secondary mb-5 line-clamp-2 leading-relaxed text-sm font-medium">
                       {q.content}
                     </p>

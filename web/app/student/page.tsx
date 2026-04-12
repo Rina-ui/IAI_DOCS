@@ -206,12 +206,12 @@ export default function StudentDashboard() {
             <p className="text-xs text-secondary">Accédez à tous les examens disponibles</p>
           </a>
           <a
-            href="/student/training"
+            href="/student/exams"
             className="bg-surface border border-secondary/20 rounded-xl p-5 hover:border-tertiary/40 hover:shadow-lg transition-all group"
           >
             <BookOpen size={24} className="text-tertiary mb-3" />
             <p className="font-bold text-on-surface mb-1">Démarrer un entraînement</p>
-            <p className="text-xs text-secondary">Pratiquez avec correction IA</p>
+            <p className="text-xs text-secondary">Choisissez un examen et pratiquez avec IA</p>
           </a>
           <a
             href="/student/forum"

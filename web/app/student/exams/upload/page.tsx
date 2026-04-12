@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createExam } from "@/lib/examService";
+import tokenService from "@/lib/tokenService";
 import { Upload, AlertCircle, CheckCircle, FileText } from "lucide-react";
 
 export default function UploadExamPage() {
@@ -10,6 +11,24 @@ export default function UploadExamPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [userRole, setUserRole] = useState<string | null>(null);
+
+  // Get user role on mount
+  useEffect(() => {
+    const token = tokenService.getToken();
+    if (token) {
+      try {
+        const parts = token.split(".");
+        if (parts.length === 3) {
+          const payload = JSON.parse(Buffer.from(parts[1], "base64").toString("utf-8"));
+          setUserRole(payload.role);
+          console.log("🔐 Upload page accessed by user with role:", payload.role);
+        }
+      } catch (err) {
+        console.error("Failed to decode token:", err);
+      }
+    }
+  }, []);
 
   // Form state
   const [title, setTitle] = useState("");
@@ -67,7 +86,11 @@ export default function UploadExamPage() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push("/student/exams");
+        // Redirect based on user role
+        const redirectPath = userRole === "admin" ? "/admin/exams"
+          : userRole === "teacher" ? "/teacher/exams"
+            : "/student/exams";
+        router.push(redirectPath);
       }, 2000);
     } catch (err) {
       setError("Impossible de télécharger l'examen. Veuillez réessayer.");

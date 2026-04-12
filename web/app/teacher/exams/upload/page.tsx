@@ -1,3 +1,3 @@
 "use client";
 
-export { default } from "../../student/exams/upload/page";
+export { default } from "@/app/student/exams/upload/page";

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Filter, Search, Plus } from "lucide-react";
+import { FileText, Filter, Search, Download, Play } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getExams } from "@\/lib\/examService";
 import type { Exam } from "@\/lib\/types";
@@ -81,13 +81,6 @@ export default function ExamsPage() {
             className="w-full bg-neutral border-none rounded-xl py-3 pl-12 pr-4 outline-none focus:ring-2 focus:ring-primary/50 text-on-surface placeholder:text-secondary/60 transition-all font-medium"
           />
         </div>
-        <a
-          href="/student/exams/upload"
-          className="bg-primary text-on-primary px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 transition-all whitespace-nowrap"
-        >
-          <Plus size={18} strokeWidth={3} />
-          Télécharger
-        </a>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
           <span className="text-sm font-semibold text-secondary mr-2 whitespace-nowrap">
             Filtres :
@@ -174,23 +167,35 @@ export default function ExamsPage() {
                   {exam.subject} {exam.year} • {exam.level}
                 </p>
               </div>
-              <div className="mt-auto flex items-end justify-between pt-4 border-t border-secondary/10">
-                <div className="flex flex-col">
-                  <span className="text-[10px] text-secondary/60 uppercase font-bold tracking-widest mb-1">
-                    Questions
+              <div className="mt-auto flex flex-col gap-3 pt-4 border-t border-secondary/10">
+                <div className="flex gap-2">
+                  <a
+                    href={exam.fileUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex-1 bg-neutral text-on-surface px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 hover:bg-secondary/10 transition-colors"
+                    title="Télécharger le PDF"
+                  >
+                    <Download size={14} />
+                    PDF
+                  </a>
+                  <a
+                    href={`/student/training/${exam.id}`}
+                    className="flex-1 bg-primary text-on-primary px-4 py-2.5 rounded-xl text-sm font-bold flex items-center justify-center gap-1.5 shadow-sm hover:opacity-90 transition-all"
+                    title="Démarrer un entraînement"
+                  >
+                    <Play size={14} />
+                    Training
+                  </a>
+                </div>
+                <div className="flex items-center justify-between text-xs text-secondary">
+                  <span className="font-bold uppercase tracking-wider">
+                    {exam.questions?.length || 0} questions
                   </span>
-                  <span className="font-bold text-xl text-primary">
-                    {exam.questions?.length || 0}
+                  <span className="text-secondary/60">
+                    {exam.subject} • {exam.level}
                   </span>
                 </div>
-                <a
-                  href={exam.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="bg-neutral text-on-surface px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-secondary/10 transition-colors"
-                >
-                  Consulter
-                </a>
               </div>
             </div>
           ))}

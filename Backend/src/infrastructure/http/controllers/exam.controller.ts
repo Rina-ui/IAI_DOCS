@@ -5,6 +5,8 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiConsumes, ApiQuery, ApiParam } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt.guard';
+import { RolesGuard } from '../guards/roles.guard';
+import { Roles } from '../decorators/roles.decorator';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { UploadExamUseCase } from '../../../application/exam/upload-exam.usecase';
 import { ValidateExamUseCase } from '../../../application/exam/validate-exam.usecase';
@@ -42,9 +44,12 @@ export class ExamController {
   }
 
   @Post()
-  @ApiOperation({ summary: 'Uploader une nouvelle épreuve (Teacher/Admin)' })
+  @UseGuards(RolesGuard)
+  @Roles('teacher', 'admin')
+  @ApiOperation({ summary: 'Uploader une nouvelle épreuve (Teacher/Admin only)' })
   @ApiConsumes('multipart/form-data', 'application/json')
   @ApiResponse({ status: 201, description: 'Épreuve créée, en attente de validation' })
+  @ApiResponse({ status: 403, description: 'Accès interdit: rôle teacher ou admin requis' })
   @UseInterceptors(FileInterceptor('file', {
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
@@ -82,10 +87,13 @@ export class ExamController {
   }
 
   @Patch(':id/validate')
-  @ApiOperation({ summary: 'Valider une épreuve (Teacher/Admin)' })
+  @UseGuards(RolesGuard)
+  @Roles('teacher', 'admin')
+  @ApiOperation({ summary: 'Valider une épreuve (Teacher/Admin only)' })
   @ApiParam({ name: 'id', description: 'UUID de l\'épreuve' })
   @ApiResponse({ status: 200, description: 'Épreuve validée' })
   @ApiResponse({ status: 400, description: 'Épreuve déjà validée' })
+  @ApiResponse({ status: 403, description: 'Accès interdit: rôle teacher ou admin requis' })
   @ApiResponse({ status: 404, description: 'Épreuve non trouvée' })
   validate(@Param('id') id: string, @CurrentUser() user: any) {
     return this.validateExamUseCase.execute(id, user.id);

@@ -1,4 +1,5 @@
 import AdminSidebar from "@/components/admin/Sidebar";
+import RoleGuard from "@/components/RoleGuard";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -15,11 +16,13 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-surface text-on-surface min-h-screen">
-      <AdminSidebar />
-      <main className="ml-64 min-h-screen">
-        <div className="pt-24 px-10 pb-12">{children}</div>
-      </main>
-    </div>
+    <RoleGuard allowedRoles={["admin"]}>
+      <div className="bg-surface text-on-surface min-h-screen">
+        <AdminSidebar />
+        <main className="ml-64 min-h-screen">
+          <div className="pt-24 px-10 pb-12">{children}</div>
+        </main>
+      </div>
+    </RoleGuard>
   );
 }

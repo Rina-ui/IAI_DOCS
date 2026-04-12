@@ -15,6 +15,18 @@ export interface LearningSummary {
   aiGeneratedAt: string;
 }
 
+export interface StepFeedback {
+  questionId: string;
+  questionText: string;
+  givenAnswer: string;
+  correctAnswer: string;
+  isCorrect: boolean;
+  pointsEarned: number;
+  explanation: string;
+  tip: string;
+  resourceToReview: string;
+}
+
 export const startTraining = async (
   data: { examId: string }
 ): Promise<TrainingSession> => {
@@ -31,8 +43,8 @@ export const submitTraining = async (
 export const submitAnswerStep = async (
   id: string,
   data: { questionId: string; answer: string }
-): Promise<{ feedback: string; isCorrect: boolean; score: number }> => {
-  return api.post(`/trainings/${id}/answer-step`, data);
+): Promise<StepFeedback> => {
+  return api.post<StepFeedback>(`/trainings/${id}/answer-step`, data);
 };
 
 export const getCorrection = async (id: string): Promise<TrainingCorrection> => {

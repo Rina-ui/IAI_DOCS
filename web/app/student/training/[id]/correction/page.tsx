@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useSearchParams } from "next/navigation";
-import { getCorrection } from "@/services/trainingService";
-import type { TrainingCorrection, QuestionCorrection } from "@/services/types";
+import { getCorrection } from "@/lib/trainingService";
+import type { TrainingCorrection, QuestionCorrection } from "@/lib/types";
 import { ArrowLeft, CheckCircle, XCircle, Award, TrendingUp } from "lucide-react";
 
 export default function CorrectionPage() {
@@ -69,11 +69,11 @@ export default function CorrectionPage() {
       {/* Header */}
       <header>
         <a
-          href={`/student/training/${examId}`}
+          href="/student/exams"
           className="inline-flex items-center gap-2 text-secondary hover:text-on-surface mb-4 transition-colors"
         >
           <ArrowLeft size={16} />
-          Retour à l'entraînement
+          Retour aux examens
         </a>
         <h1 className="text-3xl font-extrabold tracking-tight text-on-surface mb-2 font-headline">
           Correction IA
@@ -160,15 +160,15 @@ function QuestionCorrectionCard({
   return (
     <div
       className={`bg-surface border rounded-2xl p-6 ${correction.isCorrect
-          ? "border-tertiary/20"
-          : "border-error/20"
+        ? "border-tertiary/20"
+        : "border-error/20"
         }`}
     >
       <div className="flex items-start gap-4 mb-4">
         <div
           className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${correction.isCorrect
-              ? "bg-tertiary/10 text-tertiary"
-              : "bg-error/10 text-error"
+            ? "bg-tertiary/10 text-tertiary"
+            : "bg-error/10 text-error"
             }`}
         >
           {correction.isCorrect ? <CheckCircle size={18} /> : <XCircle size={18} />}
@@ -186,8 +186,8 @@ function QuestionCorrectionCard({
               <p className="text-xs font-bold text-secondary mb-1">Votre réponse</p>
               <div
                 className={`p-3 rounded-xl text-sm ${correction.isCorrect
-                    ? "bg-tertiary/10 text-tertiary"
-                    : "bg-error/10 text-error"
+                  ? "bg-tertiary/10 text-tertiary"
+                  : "bg-error/10 text-error"
                   }`}
               >
                 {Array.isArray(correction.studentAnswer)

@@ -26,11 +26,6 @@ export default function Sidebar() {
       icon: GraduationCap,
     },
     {
-      name: "Formations",
-      href: "/student/training",
-      icon: FileText,
-    },
-    {
       name: "Forum",
       href: "/student/forum",
       icon: Layers,
@@ -61,16 +56,15 @@ export default function Sidebar() {
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/student" && pathname?.startsWith(item.href));
           const Icon = item.icon;
-          
+
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${
-                isActive
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
                   ? "text-primary font-bold bg-surface ring-1 ring-secondary/20 shadow-sm"
                   : "text-secondary hover:text-on-surface hover:bg-surface/80"
-              }`}
+                }`}
             >
               <Icon className="w-5 h-5" />
               <span className="font-headline font-medium text-sm tracking-tight">

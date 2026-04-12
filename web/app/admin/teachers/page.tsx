@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { Users, Plus, UserPlus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Users, Plus, UserPlus, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import api from "@/lib/api";
 
 interface Teacher {
   id: string;
@@ -15,6 +16,55 @@ interface Teacher {
 export default function TeachersPage() {
   const [teachers, setTeachers] = useState<Teacher[]>([]);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  // Fetch teachers on mount
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        console.log("📥 Fetching teachers...");
+        // Note: Backend doesn have GET /admin/teachers endpoint yet
+        // For now, we'll just set loading to false
+        // TODO: Add GET /admin/teachers endpoint to backend
+        setTeachers([]);
+      } catch (err) {
+        console.error("❌ Failed to fetch teachers:", err);
+        setError("Impossible de charger la liste des enseignants.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
+
+  // Handle teacher creation
+  const handleCreateTeacher = async (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    specialty?: string;
+  }) => {
+    try {
+      console.log("📝 Creating teacher:", data);
+      const newTeacher = await api.post<Teacher>("/admin/teachers", data);
+      console.log("✅ Teacher created:", newTeacher);
+      setTeachers((prev) => [...prev, newTeacher]);
+      setSuccessMessage("Enseignant créé avec succès !");
+      setShowCreateModal(false);
+
+      // Clear success message after 5s
+      setTimeout(() => setSuccessMessage(null), 5000);
+    } catch (err) {
+      console.error("❌ Failed to create teacher:", err);
+      throw err;
+    }
+  };
 
   return (
     <div className="space-y-8">
@@ -36,7 +86,27 @@ export default function TeachersPage() {
         </button>
       </header>
 
-      {teachers.length === 0 ? (
+      {successMessage && (
+        <div className="bg-success/10 border border-success/30 rounded-2xl p-4 text-success flex items-start gap-3">
+          <CheckCircle2 size={20} className="shrink-0 mt-0.5" />
+          <p className="font-medium">{successMessage}</p>
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-error/10 border border-error/20 rounded-2xl p-4 text-error flex items-start gap-3">
+          <AlertCircle size={20} className="shrink-0 mt-0.5" />
+          <p className="font-medium">{error}</p>
+        </div>
+      )}
+
+      {loading ? (
+        <div className="space-y-4 animate-pulse">
+          {[...Array(3)].map((_, i) => (
+            <div key={i} className="bg-neutral h-20 rounded-2xl" />
+          ))}
+        </div>
+      ) : teachers.length === 0 ? (
         <div className="bg-surface border border-secondary/20 rounded-2xl p-12 text-center">
           <Users size={48} className="text-secondary/30 mx-auto mb-4" />
           <h3 className="text-xl font-bold text-on-surface mb-2">
@@ -71,11 +141,10 @@ export default function TeachersPage() {
                 </div>
               </div>
               <span
-                className={`text-xs font-bold px-3 py-1.5 rounded-lg ${
-                  teacher.verified
-                    ? "bg-tertiary/10 text-tertiary"
-                    : "bg-amber-100 text-amber-900"
-                }`}
+                className={`text-xs font-bold px-3 py-1.5 rounded-lg ${teacher.verified
+                  ? "bg-tertiary/10 text-tertiary"
+                  : "bg-amber-100 text-amber-900"
+                  }`}
               >
                 {teacher.verified ? "Vérifié" : "En attente"}
               </span>
@@ -85,26 +154,61 @@ export default function TeachersPage() {
       )}
 
       {showCreateModal && (
-        <CreateTeacherModal onClose={() => setShowCreateModal(false)} />
+        <CreateTeacherModal
+          onClose={() => setShowCreateModal(false)}
+          onSubmit={handleCreateTeacher}
+        />
       )}
     </div>
   );
 }
 
-function CreateTeacherModal({ onClose }: { onClose: () => void }) {
+function CreateTeacherModal({
+  onClose,
+  onSubmit,
+}: {
+  onClose: () => void;
+  onSubmit: (data: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    specialty?: string;
+  }) => Promise<void>;
+}) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-    speciality: "",
+    specialty: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Call API to create teacher
-    console.log("Creating teacher:", formData);
-    onClose();
+    setError(null);
+
+    try {
+      setSubmitting(true);
+      await onSubmit({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+        specialty: formData.speciality || undefined,
+      });
+    } catch (err) {
+      console.error("Failed to create teacher:", err);
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Impossible de créer l'enseignant. Veuillez réessayer."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -185,27 +289,43 @@ function CreateTeacherModal({ onClose }: { onClose: () => void }) {
             </label>
             <input
               type="text"
-              value={formData.speciality}
+              value={formData.specialty}
               onChange={(e) =>
-                setFormData({ ...formData, speciality: e.target.value })
+                setFormData({ ...formData, specialty: e.target.value })
               }
               className="w-full bg-neutral border border-secondary/20 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/50"
             />
           </div>
 
+          {error && (
+            <div className="bg-error/10 border border-error/20 rounded-xl p-3 text-error text-sm flex items-start gap-2">
+              <AlertCircle size={16} className="shrink-0 mt-0.5" />
+              <p>{error}</p>
+            </div>
+          )}
+
           <div className="flex gap-3 pt-4">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 bg-neutral text-secondary px-6 py-3 rounded-xl font-bold hover:bg-secondary/10 transition-colors"
+              disabled={submitting}
+              className="flex-1 bg-neutral text-secondary px-6 py-3 rounded-xl font-bold hover:bg-secondary/10 transition-colors disabled:opacity-50"
             >
               Annuler
             </button>
             <button
               type="submit"
-              className="flex-1 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold hover:opacity-90 transition-opacity"
+              disabled={submitting}
+              className="flex-1 bg-primary text-on-primary px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Créer
+              {submitting ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  Création...
+                </>
+              ) : (
+                "Créer"
+              )}
             </button>
           </div>
         </form>

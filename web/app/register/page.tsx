@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import tokenService from "@\/lib\/tokenService";
+import { redirectByRole } from "@\/lib\/roleRedirect";
 import { Check, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -54,14 +55,25 @@ export default function RegisterPage() {
         level: formData.level,
       });
 
+      // Debug: Log full response
+      console.log("✅ Registration successful, received response:", response);
+
       // Store token using tokenService
       tokenService.setToken(response.token);
 
       // Store user data in localStorage
       localStorage.setItem("user", JSON.stringify(response.user));
 
-      // Redirect to dashboard
-      window.location.href = "/dashboard";
+      // Debug: Log user role and redirect info
+      console.log("👤 User registered with role:", response.user.role);
+      console.log("📦 User data stored to localStorage:", {
+        id: response.user.id,
+        email: response.user.email,
+        role: response.user.role,
+      });
+
+      // Redirect based on role
+      redirectByRole(response.user.role);
     } catch (err) {
       const message =
         err instanceof Error ? err.message : "Échec de l'inscription";

@@ -1,6 +1,7 @@
 import Sidebar from "@/components/student/Sidebar";
 import Header from "@/components/student/Header";
 import FloatingAI from "@/components/student/FloatingAI";
+import RoleGuard from "@/components/RoleGuard";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -17,13 +18,15 @@ export default function StudentLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-surface text-on-surface min-h-screen">
-      <Sidebar />
-      <main className="ml-64 min-h-screen">
-        <Header />
-        <div className="pt-24 px-10 pb-12">{children}</div>
-      </main>
-      <FloatingAI />
-    </div>
+    <RoleGuard allowedRoles={["student"]}>
+      <div className="bg-surface text-on-surface min-h-screen">
+        <Sidebar />
+        <main className="ml-64 min-h-screen">
+          <Header />
+          <div className="pt-24 px-10 pb-12">{children}</div>
+        </main>
+        <FloatingAI />
+      </div>
+    </RoleGuard>
   );
 }
