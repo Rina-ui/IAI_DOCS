@@ -30,15 +30,9 @@ export class UploadExamUseCase {
   ) {}
 
   async execute(dto: UploadExamDto): Promise<Exam> {
-    const exam = new Exam(
-      uuidv4(),
-      dto.title,
-      dto.subject,
-      dto.year,
-      dto.level,
-      dto.fileUrl,
-      dto.uploadedById,
-    );
+
+    // @ts-ignore
+    const exam = new Exam(uuidv4(), dto.title, dto.subject, dto.year, dto.level, dto.filiere, dto.fileUrl, dto.uploadedById);
     const saved = await this.examRepo.save(exam);
 
     if (dto.questions?.length) {

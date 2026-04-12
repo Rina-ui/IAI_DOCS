@@ -5,7 +5,7 @@ export class UserOrmEntity {
   @PrimaryColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
@@ -23,12 +23,15 @@ export class UserOrmEntity {
   @Column({ nullable: true })
   speciality?: string;
 
+  @Column({ nullable: true })
+  specialty?: string;
+
   @Column({ default: false })
   verified: boolean;
 
-  @Column()
+  @Column({ nullable: true })
   level: string;
 
-  @Column()
+  @Column({ default: 0 })
   points: number;
 }

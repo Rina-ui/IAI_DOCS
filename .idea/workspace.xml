@@ -5,12 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0cc79a29-cc52-4528-9ab2-16250d583bc7" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Backend/src/application/training/answer-step.usecase.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Backend/src/application/training/learning-summary.usecase.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/ai/ai.service.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/training.controller.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/infrastructure/http/controllers/training.controller.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Backend/src/modules/training.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/Backend/src/modules/training.module.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -35,17 +47,20 @@
     &quot;git-widget-placeholder&quot;: &quot;features__marina&quot;,
     &quot;javascript.preferred.runtime.type.id&quot;: &quot;node&quot;,
     &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/marina/Documents/MyProjects/HACK_SPRINT&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/home/marina/Documents/MyProjects/iai_docs/Backend/node_modules/typescript/lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/Backend/src/domain/repositories" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/Backend" />
     </key>
@@ -65,7 +80,12 @@
       <option name="presentableId" value="Default" />
       <updated>1775377946780</updated>
       <workItem from="1775377949225" duration="1263000" />
-      <workItem from="1775395318131" duration="822000" />
+      <workItem from="1775395318131" duration="1888000" />
+      <workItem from="1775409334186" duration="135000" />
+      <workItem from="1775506113831" duration="643000" />
+      <workItem from="1775681907212" duration="911000" />
+      <workItem from="1775758577956" duration="8537000" />
+      <workItem from="1775767421946" duration="2357000" />
     </task>
     <servers />
   </component>
