@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import tokenService from "@/lib/tokenService";
+import tokenService from "@\/lib\/tokenService";
 import { Check, Eye, EyeOff } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";

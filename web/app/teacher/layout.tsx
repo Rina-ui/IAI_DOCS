@@ -1,29 +1,25 @@
-import Sidebar from "@/components/student/Sidebar";
-import Header from "@/components/student/Header";
-import FloatingAI from "@/components/student/FloatingAI";
+import TeacherSidebar from "@/components/teacher/Sidebar";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: {
-    default: "Tableau de bord | IAI_DOCS",
+    default: "Espace Enseignant | IAI_DOCS",
     template: "%s | IAI_DOCS",
   },
-  description: "Espace d'apprentissage intelligent avec correction IA",
+  description: "Espace enseignant - Gestion des examens et validations",
 };
 
-export default function StudentLayout({
+export default function TeacherLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="bg-surface text-on-surface min-h-screen">
-      <Sidebar />
+      <TeacherSidebar />
       <main className="ml-64 min-h-screen">
-        <Header />
         <div className="pt-24 px-10 pb-12">{children}</div>
       </main>
-      <FloatingAI />
     </div>
   );
 }

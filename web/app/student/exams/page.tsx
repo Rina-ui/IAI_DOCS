@@ -1,23 +1,25 @@
 "use client";
 
-import { FileText, Filter, Search } from "lucide-react";
+import { FileText, Filter, Search, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Exam, getExams } from "./examsService";
+import { getExams } from "@\/lib\/examService";
+import type { Exam } from "@\/lib\/types";
 
 export default function ExamsPage() {
   const [examsData, setExamsData] = useState<Exam[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState<string>("");
 
   useEffect(() => {
     async function loadExams() {
       try {
         setIsLoading(true);
         setError(null);
-        // Default URL fetch params as initialized in the backend call logic
         const data = await getExams({
-          level: "",
-          subject: "",
+          level: selectedLevel || undefined,
+          subject: searchQuery || undefined,
         });
         setExamsData(data);
       } catch (err) {
@@ -28,7 +30,7 @@ export default function ExamsPage() {
       }
     }
     loadExams();
-  }, []);
+  }, [selectedLevel, searchQuery]);
 
   return (
     <div className="max-w-7xl mx-auto space-y-10">
@@ -74,27 +76,57 @@ export default function ExamsPage() {
           <input
             type="text"
             placeholder="Rechercher par matière, année ou professeur..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-neutral border-none rounded-xl py-3 pl-12 pr-4 outline-none focus:ring-2 focus:ring-primary/50 text-on-surface placeholder:text-secondary/60 transition-all font-medium"
           />
         </div>
+        <a
+          href="/student/exams/upload"
+          className="bg-primary text-on-primary px-5 py-2.5 rounded-xl font-bold flex items-center gap-2 shadow-lg shadow-primary/20 hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0 transition-all whitespace-nowrap"
+        >
+          <Plus size={18} strokeWidth={3} />
+          Télécharger
+        </a>
         <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-hide">
           <span className="text-sm font-semibold text-secondary mr-2 whitespace-nowrap">
             Filtres :
           </span>
-          <button className="px-4 py-2 rounded-full bg-primary text-on-primary text-sm font-bold whitespace-nowrap shadow-sm">
+          <button
+            onClick={() => setSelectedLevel("")}
+            className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap ${selectedLevel === ""
+              ? "bg-primary text-on-primary shadow-sm"
+              : "bg-neutral text-secondary hover:bg-secondary/10 transition-colors"
+              }`}
+          >
             Tous les niveaux
           </button>
-          <button className="px-4 py-2 rounded-full bg-neutral text-secondary text-sm font-semibold hover:bg-secondary/10 transition-colors whitespace-nowrap">
-            TC1
+          <button
+            onClick={() => setSelectedLevel("undergraduate")}
+            className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap ${selectedLevel === "undergraduate"
+              ? "bg-primary text-on-primary shadow-sm"
+              : "bg-neutral text-secondary hover:bg-secondary/10 transition-colors"
+              }`}
+          >
+            Licence
           </button>
-          <button className="px-4 py-2 rounded-full bg-neutral text-secondary text-sm font-semibold hover:bg-secondary/10 transition-colors whitespace-nowrap">
-            TC2
+          <button
+            onClick={() => setSelectedLevel("graduate")}
+            className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap ${selectedLevel === "graduate"
+              ? "bg-primary text-on-primary shadow-sm"
+              : "bg-neutral text-secondary hover:bg-secondary/10 transition-colors"
+              }`}
+          >
+            Master
           </button>
-          <button className="px-4 py-2 rounded-full bg-neutral text-secondary text-sm font-semibold hover:bg-secondary/10 transition-colors whitespace-nowrap">
-            GLSI{" "}
-          </button>
-          <button className="px-4 py-2 rounded-full bg-neutral text-secondary text-sm font-semibold hover:bg-secondary/10 transition-colors whitespace-nowrap">
-            ASR{" "}
+          <button
+            onClick={() => setSelectedLevel("phd")}
+            className={`px-4 py-2 rounded-full text-sm font-bold whitespace-nowrap ${selectedLevel === "phd"
+              ? "bg-primary text-on-primary shadow-sm"
+              : "bg-neutral text-secondary hover:bg-secondary/10 transition-colors"
+              }`}
+          >
+            Doctorat
           </button>
         </div>
       </section>

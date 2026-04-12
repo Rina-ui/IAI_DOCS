@@ -1,38 +1,53 @@
-import Link from "next/link";
-import { Search, Bell, History } from "lucide-react";
+"use client";
+
+import { Search, Bell, History, User } from "lucide-react";
+import { useState } from "react";
 
 export default function Header() {
+  const [showNotifications, setShowNotifications] = useState(false);
+
   return (
-    <header className="fixed top-0 right-0 left-64 w-[calc(100%-16rem)] h-16 z-40 bg-white/70 dark:bg-slate-950/70 backdrop-blur-xl flex justify-between items-center px-8 shadow-[0_20px_40px_rgba(0,35,111,0.06)]">
+    <header className="fixed top-0 right-0 left-64 w-[calc(100%-16rem)] h-16 z-40 bg-surface/70 backdrop-blur-xl flex justify-between items-center px-8 border-b border-secondary/10">
       <div className="flex items-center gap-6 flex-1">
         <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-secondary/60 w-5 h-5" />
           <input
-            className="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/20 placeholder:text-slate-400"
-            placeholder="Search academic records..."
+            className="w-full bg-neutral border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50 placeholder:text-secondary/60 text-on-surface"
+            placeholder="Rechercher..."
             type="text"
           />
         </div>
       </div>
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2 mr-4">
-          <button className="p-2 text-slate-500 hover:bg-surface-container-high rounded-full transition-colors relative">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-white"></span>
-          </button>
-          <button className="p-2 text-slate-500 hover:bg-surface-container-high rounded-full transition-colors">
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="p-2 text-secondary hover:bg-neutral rounded-full transition-colors relative"
+            >
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+            </button>
+
+            {showNotifications && (
+              <div className="absolute right-0 top-full mt-2 w-80 bg-surface border border-secondary/20 rounded-xl shadow-lg p-4">
+                <h3 className="font-bold text-on-surface mb-3">Notifications</h3>
+                <p className="text-sm text-secondary">Aucune nouvelle notification</p>
+              </div>
+            )}
+          </div>
+          <button className="p-2 text-secondary hover:bg-neutral rounded-full transition-colors">
             <History className="w-5 h-5" />
           </button>
         </div>
-        <button className="bg-primary text-on-primary px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 active:opacity-80 transition-all">
-          AI Assistant
-        </button>
-        <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/10">
-          <img
-            alt="User avatar"
-            className="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWUqlLcVAkYLEGm6QsnYbUEQ0ST47Yr-AKoO-KueY0-Hksss2rhDxjbwwghp50JVmiVEcQhC6sdVdVRsyu_b1ni_eVZ8_1QR-66SAybJLkvTEJekXbamsZhNDKZFNDA-I9cG_VG35XIqJLFcOJy3rO1aktFkN5z-rueDQZrJVwNfE-Z-kWarf-EKicC0QN0v996M61k32gIjio54nV3YqreJy8y0pLOhxf7uiT_gKfWLvfHBb_fLQ51EY00_LWLjMDqiRvtOiWGfA"
-          />
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">
+            <User size={18} />
+          </div>
+          <div className="text-sm">
+            <p className="font-bold text-on-surface">Étudiant</p>
+            <p className="text-xs text-secondary">Licence</p>
+          </div>
         </div>
       </div>
     </header>

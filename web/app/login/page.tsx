@@ -1,7 +1,7 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import tokenService from "@/lib/tokenService";
+import tokenService from "@\/lib\/tokenService";
 import { Building2, Eye, EyeOff, Sparkles } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";

@@ -1,4 +1,4 @@
-import tokenService from "@/lib/tokenService";
+import tokenService from "@\/lib\/tokenService";
 
 export interface Exam {
   id: string;
