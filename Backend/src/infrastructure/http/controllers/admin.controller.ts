@@ -1,5 +1,16 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody } from '@nestjs/swagger';
+import {
+    BadRequestException,
+    Body,
+    Controller,
+    Delete,
+    Get,
+    Inject,
+    Param,
+    Post, UploadedFile,
+    UseGuards,
+    UseInterceptors
+} from '@nestjs/common';
+import {ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiBody, ApiConsumes} from '@nestjs/swagger';
 import { JwtAuthGuard } from '../guards/jwt.guard';
 import { RolesGuard } from '../guards/roles.guard';
 import { Roles } from '../decorators/roles.decorator';
@@ -7,6 +18,8 @@ import { CurrentUser } from '../decorators/current-user.decorator';
 import { CreateTeacherUseCase } from '../../../application/admin/create-teacher.usecase';
 import { CreateAnnouncementUseCase } from '../../../application/admin/create-announcement.usecase';
 import * as announcementRepository from '../../../domain/repositories/announcement.repository';
+import {CloudinaryService} from "../../storage/cloudinary.service";
+import {FileInterceptor} from "@nestjs/platform-express";
 
 @ApiTags('Admin')
 @ApiBearerAuth('JWT-auth')
@@ -16,6 +29,7 @@ export class AdminController {
     constructor(
         private readonly createTeacherUseCase: CreateTeacherUseCase,
         private readonly createAnnouncementUseCase: CreateAnnouncementUseCase,
+        private readonly cloudinaryService: CloudinaryService,
         @Inject(announcementRepository.ANNOUNCEMENT_REPOSITORY) private readonly announcementRepo: announcementRepository.IAnnouncementRepository,
     ) {}
 
@@ -49,25 +63,38 @@ export class AdminController {
         return this.announcementRepo.findAll();
     }
 
+//creer une annonce
     @Post('announcements')
     @Roles('admin')
-    @ApiOperation({ summary: 'Publier une annonce (Admin only)' })
-    @ApiBody({
-        schema: {
-            example: {
-                title: 'Notes du semestre 1 disponibles',
-                content: 'Les notes sont affichees.',
-                type: 'NOTES',
-                expiresAt: '2026-02-01T00:00:00.000Z',
-            },
+    @ApiOperation({ summary: 'Publier une annonce avec image optionnelle (Admin only)' })
+    @ApiConsumes('multipart/form-data', 'application/json')
+    @UseInterceptors(FileInterceptor('image', {
+        limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
+        fileFilter: (req, file, cb) => {
+            if (!file.mimetype.startsWith('image/')) {
+                cb(new BadRequestException('Seules les images sont acceptées'), false);
+            } else {
+                cb(null, true);
+            }
         },
-    })
-    @ApiResponse({ status: 201, description: 'Annonce publiée' })
-    publishAnnouncement(@Body() body: any, @CurrentUser() user: any) {
+    }))
+    async publishAnnouncement(
+        @UploadedFile() image: Express.Multer.File,
+        @Body() body: any,
+        @CurrentUser() user: any,
+    ) {
+        let imageUrl: string | undefined;
+
+        // Si une image est uploadée → Cloudinary
+        if (image) {
+            imageUrl = await this.cloudinaryService.uploadImage(image.buffer, `announcement-${Date.now()}`);
+        }
+
         return this.createAnnouncementUseCase.execute({
             ...body,
             authorId: user.id,
             expiresAt: body.expiresAt ? new Date(body.expiresAt) : undefined,
+            imageUrl,
         });
     }
 

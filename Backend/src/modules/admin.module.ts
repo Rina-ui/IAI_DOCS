@@ -11,6 +11,7 @@ import { AnnouncementController } from '../infrastructure/http/controllers/annou
 import { ANNOUNCEMENT_REPOSITORY } from '../domain/repositories/announcement.repository';
 import { USER_REPOSITORY } from '../domain/repositories/user.repository';
 import { AuthModule } from './auth.module';
+import {CloudinaryService} from "../infrastructure/storage/cloudinary.service";
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { AuthModule } from './auth.module';
     providers: [
         CreateTeacherUseCase,
         CreateAnnouncementUseCase,
+        CloudinaryService,
         { provide: ANNOUNCEMENT_REPOSITORY, useClass: AnnouncementTypeOrmRepository },
         { provide: USER_REPOSITORY, useClass: UserTypeOrmRepository },
     ],

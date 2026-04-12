@@ -7,6 +7,7 @@ export class AnnouncementOrmEntity {
     @Column('text') content: string;
     @Column({ default: 'GENERAL' }) type: string;
     @Column() authorId: string;
+    @Column({ nullable: true }) imageUrl: string;
     @CreateDateColumn() createdAt: Date;
     @Column({ nullable: true }) expiresAt: Date;
 }

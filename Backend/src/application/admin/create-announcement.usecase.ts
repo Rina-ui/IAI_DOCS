@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import * as announcementRepository from '../../domain/repositories/announcement.repository';
 import {Announcement, AnnouncementType} from '../../domain/entities/announcement.entity';
 import {v4 as uuidv4} from 'uuid';
+import * as announcementRepository_1 from "../../domain/repositories/announcement.repository";
 
 export interface CreateAnnouncementDto {
     title: string;
@@ -9,12 +9,13 @@ export interface CreateAnnouncementDto {
     type: AnnouncementType;
     authorId: string;
     expiresAt?: Date;
+    imageUrl?: string;
 }
 
 @Injectable()
 export class CreateAnnouncementUseCase {
     constructor(
-        @Inject(announcementRepository.ANNOUNCEMENT_REPOSITORY) private announcementRepo: announcementRepository.IAnnouncementRepository,
+        @Inject(announcementRepository_1.ANNOUNCEMENT_REPOSITORY) private announcementRepo: announcementRepository_1.IAnnouncementRepository,
     ) {}
 
     async execute(dto: CreateAnnouncementDto): Promise<Announcement> {
@@ -26,6 +27,7 @@ export class CreateAnnouncementUseCase {
             dto.authorId,
             new Date(),
             dto.expiresAt,
+            dto.imageUrl, // ← nouveau
         );
         return this.announcementRepo.save(announcement);
     }

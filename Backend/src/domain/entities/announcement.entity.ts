@@ -9,6 +9,7 @@ export class Announcement {
         public authorId: string,
         public createdAt: Date = new Date(),
         public expiresAt?: Date,
+        public imageUrl?: string,
     ) {}
 
     isExpired(): boolean {

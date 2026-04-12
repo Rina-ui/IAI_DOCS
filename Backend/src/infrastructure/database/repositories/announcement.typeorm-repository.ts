@@ -45,6 +45,7 @@ export class AnnouncementTypeOrmRepository implements IAnnouncementRepository {
             orm.id, orm.title, orm.content,
             orm.type as AnnouncementType, orm.authorId,
             orm.createdAt, orm.expiresAt,
+            orm.imageUrl,
         );
     }
 
@@ -52,7 +53,9 @@ export class AnnouncementTypeOrmRepository implements IAnnouncementRepository {
         const orm = new AnnouncementOrmEntity();
         Object.assign(orm, {
             id: a.id, title: a.title, content: a.content,
-            type: a.type, authorId: a.authorId, expiresAt: a.expiresAt,
+            type: a.type, authorId: a.authorId,
+            expiresAt: a.expiresAt,
+            imageUrl: a.imageUrl,
         });
         return orm;
     }
