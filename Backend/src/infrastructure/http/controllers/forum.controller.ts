@@ -4,7 +4,10 @@ import { JwtAuthGuard } from '../guards/jwt.guard';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import { CreatePostUseCase } from '../../../application/forum/create-post.usecase';
 import { UpvotePostUseCase } from '../../../application/forum/upvote-post.usecase';
+import { ReplyPostUseCase } from '../../../application/forum/reply-post.usecase';
+import { UpvoteReplyUseCase } from '../../../application/forum/upvote-reply.usecase';
 import * as forumPostRepository from '../../../domain/repositories/forum-post.repository';
+import * as forumReplyRepository from '../../../domain/repositories/forum-reply.repository';
 
 @ApiTags('Forum')
 @ApiBearerAuth('JWT-auth')
@@ -14,7 +17,10 @@ export class ForumController {
   constructor(
       private createPost: CreatePostUseCase,
       private upvotePost: UpvotePostUseCase,
+      private replyPost: ReplyPostUseCase,
+      private upvoteReply: UpvoteReplyUseCase,
       @Inject(forumPostRepository.FORUM_POST_REPOSITORY) private forumRepo: forumPostRepository.IForumPostRepository,
+      @Inject(forumReplyRepository.FORUM_REPLY_REPOSITORY) private replyRepo: forumReplyRepository.IForumReplyRepository,
   ) {}
 
   @Get()
@@ -24,11 +30,23 @@ export class ForumController {
     return this.forumRepo.findAll();
   }
 
+  @Get(':id')
+  @ApiOperation({ summary: 'Voir un post avec toutes ses réponses' })
+  @ApiParam({ name: 'id', description: 'UUID du post' })
+  async findOne(@Param('id') id: string) {
+    const post = await this.forumRepo.findById(id);
+    const replies = await this.replyRepo.findByPost(id);
+    return { ...post, replies };
+  }
+
   @Post()
   @ApiOperation({ summary: 'Créer un post dans le forum' })
   @ApiBody({
     schema: {
-      example: { title: 'Question sur le Bac 2023', content: 'Est-ce que quelqu\'un peut m\'expliquer l\'exercice 3 ?' },
+      example: {
+        title: 'Question sur le Bac 2023',
+        content: 'Est-ce que quelqu\'un peut m\'expliquer l\'exercice 3 ?',
+      },
     },
   })
   @ApiResponse({ status: 201, description: 'Post créé' })
@@ -36,11 +54,34 @@ export class ForumController {
     return this.createPost.execute(user.id, body.title, body.content);
   }
 
+  @Post(':id/replies')
+  @ApiOperation({ summary: 'Répondre à un post' })
+  @ApiParam({ name: 'id', description: 'UUID du post' })
+  @ApiBody({
+    schema: {
+      example: { content: 'Pour résoudre cet exercice, il faut d\'abord...' },
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Réponse ajoutée' })
+  reply(
+      @Param('id') postId: string,
+      @Body('content') content: string,
+      @CurrentUser() user: any,
+  ) {
+    return this.replyPost.execute(postId, user.id, content);
+  }
+
   @Patch(':id/upvote')
   @ApiOperation({ summary: 'Upvoter un post' })
   @ApiParam({ name: 'id', description: 'UUID du post' })
-  @ApiResponse({ status: 200, description: 'Upvote enregistré' })
-  upvote(@Param('id') id: string) {
+  upvotePostHandler(@Param('id') id: string) {
     return this.upvotePost.execute(id);
+  }
+
+  @Patch('replies/:id/upvote')
+  @ApiOperation({ summary: 'Upvoter une réponse' })
+  @ApiParam({ name: 'id', description: 'UUID de la réponse' })
+  upvoteReplyHandler(@Param('id') id: string) {
+    return this.upvoteReply.execute(id);
   }
 }

@@ -6,17 +6,21 @@ export enum ExamStatus {
 
 class Question {}
 
+export type Filiere = 'TC1' | 'TC2' | 'GLSI' | 'ASR' | 'COMMUN';
+
 export class Exam {
   constructor(
-    public readonly id: string,
-    public title: string,
-    public subject: string,
-    public year: number,
-    public level: string,
-    public fileUrl: string,
-    public uploadedById: string,
-    public status: ExamStatus = ExamStatus.PENDING,
-    public questions: Question[] = [],
+      public readonly id: string,
+      public title: string,
+      public subject: string,
+      public year: number,
+      public level: string,
+      public filiere: string,
+      public fileUrl: string,
+      public uploadedById: string,
+      public status: ExamStatus = ExamStatus.PENDING,
+      public questions?: string,
+      public subjectId?: string,
   ) {}
 
   validate(): void {
